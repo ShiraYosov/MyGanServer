@@ -19,5 +19,12 @@ namespace MyGanServer.Controllers
             this.context = context;
         }
         #endregion
+
+        [Route("TryCommand")]
+        [HttpGet]
+        public string Hello()
+        {
+            return "HELLO";
+        }
     }
 }
