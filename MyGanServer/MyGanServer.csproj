@@ -12,4 +12,10 @@
     <ProjectReference Include="..\MyGanServerBL\MyGanServerBL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\" />
+    <Folder Include="ModelsBL\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

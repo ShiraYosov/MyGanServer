@@ -20,11 +20,6 @@ namespace MyGanServer.Controllers
         }
         #endregion
 
-        [Route("TryCommand")]
-        [HttpGet]
-        public string Hello()
-        {
-            return "HELLO";
-        }
+       
     }
 }
