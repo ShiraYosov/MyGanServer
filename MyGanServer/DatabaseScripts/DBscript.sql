@@ -75,7 +75,10 @@ REFERENCES Students(StudentID),
 userID INT NOT NULL,
 CONSTRAINT FK_ParentOfStudent FOREIGN KEY (userID)
 REFERENCES Users(userID),
-relationToStudentID NVARCHAR(255) NOT NULL
+PRIMARY KEY(studentID,userID),
+relationToStudentID NVARCHAR(255) NOT NULL,
+CONSTRAINT FK_RelationToStudent FOREIGN KEY (relationToStudentID)
+REFERENCES RelationToStudent(relationToStudentID),
 CONSTRAINT PK_StudentOfUsers PRIMARY KEY (studentID,userID)
 );
 
@@ -83,6 +86,26 @@ create table Groups(
 groupID INT identity(1,1) PRIMARY KEY NOT NULL,
 teacher NVARCHAR(255) NOT NULL,
 groupName NVARCHAR(255) NOT NULL
+);
+
+create table RelationToStudent(
+relationToStudentID INT identity(1,1) PRIMARY KEY NOT NULL,
+relationType NVARCHAR(255) NOT NULL
+);
+
+create table Allergies(
+allergyID INT identity(1,1) PRIMARY KEY NOT NULL,
+allergyName NVARCHAR(255) NOT NULL
+);
+
+create table StudentAllergies(
+studentID INT NOT NULL,
+CONSTRAINT FK_StudentAllergies FOREIGN KEY (studentID)
+REFERENCES Students(studentID),
+allergyID INT NOT NULL,
+CONSTRAINT FK_StudentAllergyName FOREIGN KEY (allergyID)
+REFERENCES Allergies(allergyID),
+PRIMARY KEY(studentID, allergyID)
 );
 
 
