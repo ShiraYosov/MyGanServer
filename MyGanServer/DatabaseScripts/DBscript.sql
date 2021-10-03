@@ -91,7 +91,8 @@ groupName NVARCHAR(255) NOT NULL
 create table RelationToStudent(
 relationToStudentID INT identity(1,1) PRIMARY KEY NOT NULL,
 relationType NVARCHAR(255) NOT NULL
-);
+)
+;
 
 create table Allergies(
 allergyID INT identity(1,1) PRIMARY KEY NOT NULL,
