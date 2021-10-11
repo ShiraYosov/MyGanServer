@@ -10,21 +10,23 @@ Go
 
 
 create table Events(
-eventID INT identity(1,1) PRIMARY KEY NOT NULL,
-eventName NVARCHAR (250) NOT NULL,
-eventDate DATETIME NOT NULL,
-duration INT NOT NULL,
-groupID INT NOT NULL
+EventID INT identity(1,1) PRIMARY KEY NOT NULL,
+EventName NVARCHAR (250) NOT NULL,
+EventDate DATETIME NOT NULL DEFAULT GETDATE(),
+Duration INT NOT NULL,
+GroupID INT NOT NULL,
+CONSTRAINT FK_GroupEvent FOREIGN KEY (GroupID)
+REFERENCES Groups(GroupID)
 );
 
 create table Photos(
 ID INT identity(1,1) PRIMARY KEY NOT NULL,
-type NVARCHAR(255) NOT NULL,
-description NVARCHAR(255) NOT NULL,
-date DATETIME NOT NULL,
-eventID INT NOT NULL,
-CONSTRAINT FK_EventPhotos FOREIGN KEY (eventID)
-REFERENCES Events(eventID),
+Type NVARCHAR(255) NOT NULL,
+Description NVARCHAR(255) NOT NULL,
+Date DATETIME NOT NULL,
+EventID INT NOT NULL,
+CONSTRAINT FK_EventPhotos FOREIGN KEY (EventID)
+REFERENCES Events(EventID),
 );
 
 create table Users(
@@ -44,12 +46,18 @@ BirthDate DATETIME NOT NULL DEFAULT GETDATE(),
 FirstName INT NOT NULL,
 Gender NVARCHAR(255) NOT NULL,
 ArrivedFrom NVARCHAR(255) NOT NULL,
-Allergies NVARCHAR(255) NOT NULL,
 PhotoID INT NOT NULL,
-Grade INT NOT NULL,
+GradeID INT NOT NULL,
+CONSTRAINT FK_StudentGrade FOREIGN KEY (GradeID)
+REFERENCES Grade(GradeID),
 GroupID INT NOT NULL,
 CONSTRAINT FK_StudentGroup FOREIGN KEY (GroupID)
 REFERENCES Groups(GroupID)
+);
+
+create table Grade(
+GradeID INT identity(1,1) PRIMARY KEY NOT NULL,
+GradeName NVARCHAR NOT NULL
 );
 
 create table StudentOfUsers(
@@ -75,9 +83,12 @@ Name NVARCHAR(255) NOT NULL
 
 create table KindergartenManagers(
 UserID INT NOT NULL,
+CONSTRAINT FK_KindergartenUsers FOREIGN KEY (UserID)
+REFERENCES Users(UserID),
 KindergartenID INT  NOT NULL,
-CONSTRAINT FK_KindergartenManager FOREIGN KEY (KindergartenID)
+CONSTRAINT FK_KindergartenManagersKindergarten FOREIGN KEY (KindergartenID )
 REFERENCES Kindergarten(KindergartenID),
+CONSTRAINT PK_KindergartenManager PRIMARY KEY (UserID,KindergartenID)
 );
 
 create table Groups(
@@ -98,7 +109,9 @@ CONSTRAINT FK_GroupApproval FOREIGN KEY (ApprovalID)
 REFERENCES Groups(GroupID),
 Waiting INT NOT NULL,
 Approved INT NOT NULL,
-Status NVARCHAR(255) NOT NULL
+StatusID NVARCHAR(255) NOT NULL,
+CONSTRAINT FK_ApprovalStatusType FOREIGN KEY (StatusID)
+REFERENCES StatusType(StatusID),
 );
 
 create table Signatures(
@@ -108,6 +121,8 @@ REFERENCES Approvals(ApprovalID),
 UserID INT NOT NULL,
 CONSTRAINT FK_UserSignature FOREIGN KEY (UserID)
 REFERENCES Users(UserID),
+SignatureDate DATETIME NOT NULL DEFAULT GETDATE(),
+CONSTRAINT PK_UserApprovals PRIMARY KEY (ApprovalID,UserID)
 );
 
 create table RelationToStudent(
@@ -122,13 +137,26 @@ allergyName NVARCHAR(255) NOT NULL
 );
 
 create table StudentAllergies(
-studentID INT NOT NULL,
-CONSTRAINT FK_StudentAllergies FOREIGN KEY (studentID)
-REFERENCES Students(studentID),
-allergyID INT NOT NULL,
-CONSTRAINT FK_StudentAllergyName FOREIGN KEY (allergyID)
-REFERENCES Allergies(allergyID),
-PRIMARY KEY(studentID, allergyID)
+StudentID INT NOT NULL,
+CONSTRAINT FK_StudentAllergiesStudents FOREIGN KEY (StudentID)
+REFERENCES Students(StudentID),
+AllergyID INT NOT NULL,
+CONSTRAINT FK_StudentAllergyName FOREIGN KEY (AllergyID)
+REFERENCES Allergies(AllergyID),
+CONSTRAINT PK_StudentAllergy PRIMARY KEY(StudentID, AllergyID)
+);
+
+create table Messages(
+MessageID INT PRIMARY KEY NOT NULL,
+CONSTRAINT FK_GroupMessage FOREIGN KEY (MessageID)
+REFERENCES Groups(GroupID),
+Content NVARCHAR(255) NOT NULL,
+MessageDate DATETIME NOT NULL DEFAULT GETDATE(),
+);
+
+create table StatusType(
+StatusID INT identity(1,1) PRIMARY KEY NOT NULL,
+Description NVARCHAR(255) NOT NULL
 );
 
 
