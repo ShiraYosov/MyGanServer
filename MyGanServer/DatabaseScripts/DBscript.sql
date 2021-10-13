@@ -3,7 +3,7 @@ Create Database MyGanDB
 Go
 
 Use MyGanDB
-Use MyGanDB
+
 
 create table Kindergarten(
 KindergartenID INT identity(1,1) PRIMARY KEY NOT NULL,
@@ -59,8 +59,8 @@ GradeName NVARCHAR NOT NULL
 );
 
 create table Students(
-StudentID INT identity(1,1) PRIMARY KEY NOT NULL,
-SastName NVARCHAR(255) NOT NULL,
+StudentID INT PRIMARY KEY NOT NULL,
+LastName NVARCHAR(255) NOT NULL,
 BirthDate DATETIME NOT NULL DEFAULT GETDATE(),
 FirstName INT NOT NULL,
 Gender NVARCHAR(255) NOT NULL,
@@ -154,5 +154,12 @@ MessageDate DATETIME NOT NULL DEFAULT GETDATE(),
 );
 
 
+INSERT INTO Grade(GradeName)
+VALUES (N'חובה');
 
+INSERT INTO Grade(GradeName)
+VALUES (N'טרום חובה');
+
+INSERT INTO Grade(GradeName)
+VALUES (N'טרום טרום חובה');
 
