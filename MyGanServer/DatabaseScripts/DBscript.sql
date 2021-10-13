@@ -163,3 +163,7 @@ VALUES (N'טרום חובה');
 INSERT INTO Grade(GradeName)
 VALUES (N'טרום טרום חובה');
 
+INSERT INTO Users(Email,Password,FName,LastName,PhoneNumber,IsSystemManager)
+VALUES('Shira@gmail.com','shira',N'שירה',N'יוסוב','0544963452',1);
+
+scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
