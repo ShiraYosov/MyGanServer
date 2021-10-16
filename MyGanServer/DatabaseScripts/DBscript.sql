@@ -55,7 +55,7 @@ REFERENCES Events(EventID),
 
 create table Grade(
 GradeID INT identity(1,1) PRIMARY KEY NOT NULL,
-GradeName NVARCHAR NOT NULL
+GradeName NVARCHAR(255) NOT NULL
 );
 
 create table Students(
