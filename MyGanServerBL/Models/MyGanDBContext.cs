@@ -17,6 +17,21 @@ namespace MyGanServerBL.Models
         {
         }
 
+        public virtual DbSet<Allergy> Allergies { get; set; }
+        public virtual DbSet<Approval> Approvals { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Grade> Grades { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<Kindergarten> Kindergartens { get; set; }
+        public virtual DbSet<KindergartenManager> KindergartenManagers { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<Photo> Photos { get; set; }
+        public virtual DbSet<RelationToStudent> RelationToStudents { get; set; }
+        public virtual DbSet<Signature> Signatures { get; set; }
+        public virtual DbSet<StatusType> StatusTypes { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<StudentAllergy> StudentAllergies { get; set; }
+        public virtual DbSet<StudentOfUser> StudentOfUsers { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,30 +45,347 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<Allergy>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UC_Email")
-                    .IsUnique();
+                entity.Property(e => e.AllergyId).HasColumnName("allergyID");
 
+                entity.Property(e => e.AllergyName)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("allergyName");
+            });
+
+            modelBuilder.Entity<Approval>(entity =>
+            {
+                entity.Property(e => e.ApprovalId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ApprovalID");
+
+                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
+                entity.HasOne(d => d.ApprovalNavigation)
+                    .WithOne(p => p.Approval)
+                    .HasForeignKey<Approval>(d => d.ApprovalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupApproval");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Approvals)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ApprovalStatusType");
+            });
+
+            modelBuilder.Entity<Event>(entity =>
+            {
+                entity.Property(e => e.EventId).HasColumnName("EventID");
+
+                entity.Property(e => e.EventDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.EventName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupEvent");
+            });
+
+            modelBuilder.Entity<Grade>(entity =>
+            {
+                entity.ToTable("Grade");
+
+                entity.Property(e => e.GradeId).HasColumnName("GradeID");
+
+                entity.Property(e => e.GradeName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
+
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.GroupName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.KindergartenId).HasColumnName("KindergartenID");
+
+                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+
+                entity.HasOne(d => d.Kindergarten)
+                    .WithMany(p => p.Groups)
+                    .HasForeignKey(d => d.KindergartenId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_KinderGartenGroup");
+
+                entity.HasOne(d => d.Teacher)
+                    .WithMany(p => p.Groups)
+                    .HasForeignKey(d => d.TeacherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupTeacher");
+            });
+
+            modelBuilder.Entity<Kindergarten>(entity =>
+            {
+                entity.ToTable("Kindergarten");
+
+                entity.Property(e => e.KindergartenId).HasColumnName("KindergartenID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<KindergartenManager>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.KindergartenId })
+                    .HasName("PK_KindergartenManager");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.KindergartenId).HasColumnName("KindergartenID");
+
+                entity.HasOne(d => d.Kindergarten)
+                    .WithMany(p => p.KindergartenManagers)
+                    .HasForeignKey(d => d.KindergartenId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_KindergartenManagersKindergarten");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.KindergartenManagers)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_KindergartenUsers");
+            });
+
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.Property(e => e.MessageId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("MessageID");
+
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.MessageDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.MessageNavigation)
+                    .WithOne(p => p.Message)
+                    .HasForeignKey<Message>(d => d.MessageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupMessage");
+            });
+
+            modelBuilder.Entity<Photo>(entity =>
+            {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstName)
+                entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(30);
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.EventId).HasColumnName("EventID");
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.HasOne(d => d.Event)
+                    .WithMany(p => p.Photos)
+                    .HasForeignKey(d => d.EventId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EventPhotos");
+            });
+
+            modelBuilder.Entity<RelationToStudent>(entity =>
+            {
+                entity.ToTable("RelationToStudent");
+
+                entity.Property(e => e.RelationToStudentId).HasColumnName("RelationToStudentID");
+
+                entity.Property(e => e.RelationType)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Signature>(entity =>
+            {
+                entity.HasKey(e => new { e.ApprovalId, e.UserId })
+                    .HasName("PK_UserApprovals");
+
+                entity.Property(e => e.ApprovalId).HasColumnName("ApprovalID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.SignatureDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Approval)
+                    .WithMany(p => p.Signatures)
+                    .HasForeignKey(d => d.ApprovalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupSignature");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Signatures)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserSignature");
+            });
+
+            modelBuilder.Entity<StatusType>(entity =>
+            {
+                entity.HasKey(e => e.StatusId)
+                    .HasName("PK__StatusTy__C8EE204376A2D6B4");
+
+                entity.ToTable("StatusType");
+
+                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.Property(e => e.StudentId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("StudentID");
+
+                entity.Property(e => e.ArrivedFrom)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.BirthDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Gender)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.GradeId).HasColumnName("GradeID");
+
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(30);
+                    .HasMaxLength(255);
 
-                entity.Property(e => e.UserPswd)
+                entity.Property(e => e.PhotoId).HasColumnName("PhotoID");
+
+                entity.HasOne(d => d.Grade)
+                    .WithMany(p => p.Students)
+                    .HasForeignKey(d => d.GradeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentGrade");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.Students)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentGroup");
+            });
+
+            modelBuilder.Entity<StudentAllergy>(entity =>
+            {
+                entity.HasKey(e => new { e.StudentId, e.AllergyId })
+                    .HasName("PK_StudentAllergy");
+
+                entity.Property(e => e.StudentId).HasColumnName("StudentID");
+
+                entity.Property(e => e.AllergyId).HasColumnName("AllergyID");
+
+                entity.HasOne(d => d.Allergy)
+                    .WithMany(p => p.StudentAllergies)
+                    .HasForeignKey(d => d.AllergyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentAllergyName");
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.StudentAllergies)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentAllergiesStudents");
+            });
+
+            modelBuilder.Entity<StudentOfUser>(entity =>
+            {
+                entity.HasKey(e => new { e.StudentId, e.UserId });
+
+                entity.Property(e => e.StudentId).HasColumnName("StudentID");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.RelationToStudentId).HasColumnName("RelationToStudentID");
+
+                entity.HasOne(d => d.RelationToStudent)
+                    .WithMany(p => p.StudentOfUsers)
+                    .HasForeignKey(d => d.RelationToStudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RelationToStudent");
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.StudentOfUsers)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentOfParent");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.StudentOfUsers)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ParentOfStudent");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D1053448850AAB")
+                    .IsUnique();
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.Email)
                     .IsRequired()
-                    .HasMaxLength(30);
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Fname)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("FName");
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(255);
             });
 
             OnModelCreatingPartial(modelBuilder);
