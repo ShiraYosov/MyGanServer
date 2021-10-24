@@ -9,7 +9,7 @@ namespace MyGanServerBL.Models
     {
         public User()
         {
-            Groups = new HashSet<Group>();
+            Groups = new List<Group>();
             KindergartenManagers = new HashSet<KindergartenManager>();
             Signatures = new HashSet<Signature>();
             StudentOfUsers = new HashSet<StudentOfUser>();
