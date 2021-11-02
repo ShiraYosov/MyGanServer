@@ -166,4 +166,23 @@ VALUES (N'טרום טרום חובה');
 INSERT INTO Users(Email,Password,FName,LastName,PhoneNumber,IsSystemManager)
 VALUES('Shira@gmail.com','shira',N'שירה',N'יוסוב','0544963452',1);
 
-scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
+
+INSERT INTO Allergies(allergyName)
+VALUES (N'גלוטן');
+
+INSERT INTO Allergies(allergyName)
+VALUES (N'שיבולת שועל');
+
+INSERT INTO Allergies(allergyName)
+VALUES (N'כוסמת');
+
+INSERT INTO Allergies(allergyName)
+VALUES (N'אורז');
+
+INSERT INTO Allergies(allergyName)
+VALUES (N'חיטה');
+
+INSERT INTO Allergies(allergyName)
+VALUES (N'תירס');
+
+--scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
