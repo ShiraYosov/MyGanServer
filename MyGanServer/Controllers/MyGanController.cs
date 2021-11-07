@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MyGanServerBL.Models;
+using MyGanServer.DTO;
 
 namespace MyGanServer.Controllers
 {
@@ -44,6 +45,18 @@ namespace MyGanServer.Controllers
             }
         }
 
+        [Route("GetLookups")]
+        [HttpGet]
+        public Lookups GetLookups()
+        {
+            Lookups obj = new Lookups()
+            {
+                Grades = context.Grades.ToList(),
+                Allergies = context.Allergies.ToList()
+            };
+            Response.StatusCode= (int)System.Net.HttpStatusCode.OK;
+            return obj;
+        }
 
     }
 
