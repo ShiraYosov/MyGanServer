@@ -50,13 +50,21 @@ namespace MyGanServer.Controllers
         [HttpGet]
         public Lookups GetLookups()
         {
-            Lookups obj = new Lookups()
+            try
             {
-                Grades = context.Grades.ToList(),
-                Allergies = context.Allergies.ToList()
-            };
-            Response.StatusCode= (int)System.Net.HttpStatusCode.OK;
-            return obj;
+                Lookups obj = new Lookups()
+                {
+                    Grades = context.Grades.ToList(),
+                    Allergies = context.Allergies.ToList()
+                };
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return obj;
+            }
+
+            catch
+            {
+                return null;
+            }
         }
 
 
