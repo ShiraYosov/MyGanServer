@@ -93,6 +93,29 @@ namespace MyGanServer.Controllers
             }
             return Forbid();
         }
+
+        [Route("AddAllergy")]
+        [HttpPost]
+        public bool AddAllergy([FromBody] Allergy allergy)
+        {
+            if (allergy != null)
+            {
+                bool added = this.context.AddAllergy(allergy);
+                if (added)
+                {
+                   Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return added;
+                }
+                else
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
     }
 
 

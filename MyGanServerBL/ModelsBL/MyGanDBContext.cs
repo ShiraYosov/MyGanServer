@@ -11,8 +11,22 @@ namespace MyGanServerBL.Models
         public User Login(string email, string pswd)
         {
             User user = this.Users.Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
-
             return user;
+        }
+
+        public bool AddAllergy(Allergy allergy)
+        {
+            try
+            {
+                this.Allergies.Add(allergy);
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
     }
 }
