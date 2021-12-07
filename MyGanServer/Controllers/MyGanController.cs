@@ -111,7 +111,7 @@ namespace MyGanServer.Controllers
                 bool added = this.context.AddAllergy(allergy);
                 if (added)
                 {
-                   Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                     return added;
                 }
                 else
@@ -124,7 +124,30 @@ namespace MyGanServer.Controllers
                 return false;
             }
         }
+
+        [Route("Register")]
+        [HttpPost]
+        public User Register([FromBody] User user)
+        {
+            //Check user name and password
+            if (user != null)
+            {
+                context.AddUser(user);
+
+                HttpContext.Session.SetObject("theUser", user);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                return user;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
     }
+
+
 
 
 }

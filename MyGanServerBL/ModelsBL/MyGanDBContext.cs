@@ -28,5 +28,18 @@ namespace MyGanServerBL.Models
                 return false;
             }
         }
+
+        public void AddUser(User user)
+        {
+            try
+            {
+                this.Users.Add(user);
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }
