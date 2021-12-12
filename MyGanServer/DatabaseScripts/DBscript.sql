@@ -185,4 +185,7 @@ VALUES (N'חיטה');
 INSERT INTO Allergies(allergyName)
 VALUES (N'תירס');
 
+ALTER TABLE Users
+ADD IsApproved BIT DEFAULT 0 NOT NULL
+
 --scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force

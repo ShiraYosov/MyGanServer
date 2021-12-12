@@ -29,16 +29,18 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public void AddUser(User user)
+        public bool AddUser(User user)
         {
             try
             {
                 this.Users.Add(user);
                 this.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return false;
             }
         }
     }

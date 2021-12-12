@@ -45,7 +45,7 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Allergy>(entity =>
             {
@@ -256,7 +256,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE204376A2D6B4");
+                    .HasName("PK__StatusTy__C8EE2043EF2BFE7B");
 
                 entity.ToTable("StatusType");
 
@@ -361,7 +361,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D1053448850AAB")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D1053498B13776")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

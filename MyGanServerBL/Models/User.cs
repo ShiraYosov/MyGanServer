@@ -9,7 +9,7 @@ namespace MyGanServerBL.Models
     {
         public User()
         {
-            Groups = new List<Group>();
+            Groups = new HashSet<Group>();
             KindergartenManagers = new HashSet<KindergartenManager>();
             Signatures = new HashSet<Signature>();
             StudentOfUsers = new HashSet<StudentOfUser>();
@@ -22,6 +22,7 @@ namespace MyGanServerBL.Models
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsSystemManager { get; set; }
+        public bool IsApproved { get; set; }
 
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<KindergartenManager> KindergartenManagers { get; set; }
