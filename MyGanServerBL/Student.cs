@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace MyGanServerBL.Models
+namespace MyGanServerBL
 {
     public partial class Student
     {
@@ -27,3 +27,4 @@ namespace MyGanServerBL.Models
         public virtual ICollection<StudentOfUser> StudentOfUsers { get; set; }
     }
 }
+

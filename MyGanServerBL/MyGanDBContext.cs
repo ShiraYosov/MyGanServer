@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace MyGanServerBL.Models
+namespace MyGanServerBL
 {
     public partial class MyGanDBContext : DbContext
     {
@@ -256,7 +256,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE2043914CECB3");
+                    .HasName("PK__StatusTy__C8EE2043F6C7488E");
 
                 entity.ToTable("StatusType");
 
@@ -285,7 +285,7 @@ namespace MyGanServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.GradeId).HasColumnName("GradeID");
+                //entity.Property(e => e.GradeId).HasColumnName("GradeID");
 
                 entity.Property(e => e.GroupId).HasColumnName("GroupID");
 
@@ -293,11 +293,13 @@ namespace MyGanServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.HasOne(d => d.Grade)
-                    .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.GradeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentGrade");
+                
+
+                //entity.HasOne(d => d.Grade)
+                //    .WithMany(p => p.Students)
+                //    .HasForeignKey(d => d.GradeId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_StudentGrade");
 
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.Students)
@@ -359,7 +361,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D105346FD4E1FE")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D105342874C484")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
