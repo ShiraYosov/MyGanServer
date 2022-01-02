@@ -9,5 +9,6 @@ namespace MyGanServer.DTO
     {
         public List<Grade> Grades { get; set; }
         public List<Allergy> Allergies { get; set; }
+        public List<RelationToStudent> Relations { get; set; }
     }
 }

@@ -55,7 +55,8 @@ namespace MyGanServer.Controllers
                 Lookups obj = new Lookups()
                 {
                     Grades = context.Grades.ToList(),
-                    Allergies = context.Allergies.ToList()
+                    Allergies = context.Allergies.ToList(),
+                    Relations = context.RelationToStudents.ToList()
                 };
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return obj;
