@@ -43,5 +43,20 @@ namespace MyGanServerBL.Models
                 return false;
             }
         }
+
+        public bool AddKindergartenManager(KindergartenManager manager)
+        {
+            try
+            {
+                this.KindergartenManagers.Add(manager);
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
     }
 }
