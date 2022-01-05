@@ -167,6 +167,27 @@ namespace MyGanServer.Controllers
                 return null;
             }
         }
+
+        [Route("AddKindergarten")]
+        [HttpPost]
+        public Kindergarten AddKindergarten([FromBody] Kindergarten kindergarten)
+        {
+            //Check user name and password
+            if (kindergarten != null)
+            {
+                context.AddKindergarten(kindergarten);
+
+                HttpContext.Session.SetObject("theUser", kindergarten);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                return kindergarten;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
     }
 
 

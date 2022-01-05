@@ -58,5 +58,20 @@ namespace MyGanServerBL.Models
                 return false;
             }
         }
+
+        public bool AddKindergarten(Kindergarten k)
+        {
+            try
+            {
+                this.Kindergartens.Add(k);
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
     }
 }
