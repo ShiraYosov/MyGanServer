@@ -44,6 +44,29 @@ namespace MyGanServerBL.Models
             }
         }
 
+        public bool TeacherRegister(User user)
+        {
+            try
+            {
+                Group userGroup = user.Groups.First();
+                user.Groups.Clear();
+                Group g = Groups.Where(g => g.GroupId == userGroup.GroupId).FirstOrDefault();
+                g.Teacher = user;
+                this.Groups.Update(g);
+                this.SaveChanges();
+
+                
+                
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
         public bool AddKindergartenManager(KindergartenManager manager)
         {
             try

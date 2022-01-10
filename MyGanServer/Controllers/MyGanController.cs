@@ -147,6 +147,29 @@ namespace MyGanServer.Controllers
             }
         }
 
+       
+
+        [Route("TeacherRegister")]
+        [HttpPost]
+        public User TeacherRegister([FromBody] User user)
+        {
+            //Check user name and password
+            if (user != null && user.Groups != null && user.Groups.Count == 1)
+            {
+                context.TeacherRegister(user);
+
+                HttpContext.Session.SetObject("theUser", user);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                return user;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+
         [Route("ManagerRegister")]
         [HttpPost]
         public KindergartenManager ManagerRegister([FromBody] KindergartenManager manager)
