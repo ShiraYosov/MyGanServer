@@ -55,9 +55,6 @@ namespace MyGanServerBL.Models
                 this.Groups.Update(g);
                 this.SaveChanges();
 
-                
-                
-                
                 return true;
             }
             catch (Exception e)
@@ -67,12 +64,19 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public bool AddKindergartenManager(KindergartenManager manager)
+        public bool ParentRegister(User user)
         {
             try
             {
-                this.KindergartenManagers.Add(manager);
+                StudentOfUser studentOfUsers = user.StudentOfUsers.First();
+                Student student = studentOfUsers.Student;
+                this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+
+
                 this.SaveChanges();
+
                 return true;
             }
             catch (Exception e)
@@ -82,19 +86,8 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public bool AddKindergarten(Kindergarten k)
-        {
-            try
-            {
-                this.Kindergartens.Add(k);
-                this.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-        }
+
+
+
     }
 }

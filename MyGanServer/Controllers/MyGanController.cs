@@ -153,14 +153,14 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public User TeacherRegister([FromBody] User user)
         {
-            //Check user name and password
+            
             if (user != null && user.Groups != null && user.Groups.Count == 1)
             {
                 context.TeacherRegister(user);
 
                 HttpContext.Session.SetObject("theUser", user);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                
                 return user;
             }
             else
@@ -170,19 +170,29 @@ namespace MyGanServer.Controllers
             }
         }
 
-        [Route("ManagerRegister")]
+        [Route("ParentRegister")]
         [HttpPost]
-        public KindergartenManager ManagerRegister([FromBody] KindergartenManager manager)
+        public User ParentRegister([FromBody] User user)
         {
-            //Check user name and password
-            if (manager != null)
-            {
-                context.AddKindergartenManager(manager);
 
-                HttpContext.Session.SetObject("theUser", manager);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return manager;
+            if (user != null)
+            {
+                bool success = context.ParentRegister(user);
+
+                if (success)
+                {
+                    HttpContext.Session.SetObject("theUser", user);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return user;
+                }
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+                
+
+                
             }
             else
             {
@@ -191,26 +201,9 @@ namespace MyGanServer.Controllers
             }
         }
 
-        [Route("AddKindergarten")]
-        [HttpPost]
-        public Kindergarten AddKindergarten([FromBody] Kindergarten kindergarten)
-        {
-            //Check user name and password
-            if (kindergarten != null)
-            {
-                context.AddKindergarten(kindergarten);
 
-                HttpContext.Session.SetObject("theUser", kindergarten);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return kindergarten;
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
-            }
-        }
+
+
     }
 
 

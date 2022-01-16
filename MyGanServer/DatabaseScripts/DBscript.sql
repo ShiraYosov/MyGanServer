@@ -187,3 +187,13 @@ ALTER TABLE Users
 ADD IsApproved BIT DEFAULT 0 NOT NULL
 
 --scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
+select * from Kindergarten
+select * from Groups
+insert into Groups (TeacherID, GroupName, KindergartenID, Code) VALUES (1, 'Kuku', 1, 'code')
+select * from RelationToStudent
+insert into RelationToStudent (RelationType) VALUES ('אבא')
+insert into RelationToStudent (RelationType) VALUES ('אמא')
+
+select * from Users
+select * from StudentOfUsers
+select * from Students
