@@ -28,8 +28,7 @@ REFERENCES Users(UserID),
 GroupName NVARCHAR(255) NOT NULL,
 KindergartenID INT NOT NULL,
 CONSTRAINT FK_KinderGartenGroup FOREIGN KEY (KindergartenID)
-REFERENCES Kindergarten(KindergartenID),
-Code NVARCHAR(255) NOT NULL
+REFERENCES Kindergarten(KindergartenID)
 );
 
 create table Events(
@@ -59,7 +58,7 @@ GradeName NVARCHAR(255) NOT NULL
 );
 
 create table Students(
-StudentID INT PRIMARY KEY NOT NULL,
+StudentID NVARCHAR(255) PRIMARY KEY NOT NULL,
 LastName NVARCHAR(255) NOT NULL,
 BirthDate DATETIME NOT NULL DEFAULT GETDATE(),
 FirstName NVARCHAR(255) NOT NULL,
@@ -197,3 +196,4 @@ insert into RelationToStudent (RelationType) VALUES ('אמא')
 select * from Users
 select * from StudentOfUsers
 select * from Students
+select * from KindergartenManagers

@@ -256,7 +256,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE2043B2221D7B");
+                    .HasName("PK__StatusTy__C8EE20438CA84959");
 
                 entity.ToTable("StatusType");
 
@@ -359,7 +359,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D105342C8052BE")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534FD08D0EA")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
