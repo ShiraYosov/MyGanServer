@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using MyGanServerBL.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MyGanServerBL.Models
 {
@@ -10,7 +13,12 @@ namespace MyGanServerBL.Models
     {
         public User Login(string email, string pswd)
         {
-            User user = this.Users.Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
+            User user = new User();
+            user = this.Users.
+                      Include(g => g.Groups).
+                      Include(sou => sou.StudentOfUsers). 
+                      Include(km => km.KindergartenManagers).
+                      Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
             return user;
         }
 

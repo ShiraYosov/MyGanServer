@@ -17,7 +17,6 @@ namespace MyGanServerBL.Models
         public int TeacherId { get; set; }
         public string GroupName { get; set; }
         public int KindergartenId { get; set; }
-        public string Code { get; set; }
 
         public virtual Kindergarten Kindergarten { get; set; }
         public virtual User Teacher { get; set; }

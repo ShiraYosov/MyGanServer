@@ -13,7 +13,7 @@ namespace MyGanServerBL.Models
             StudentOfUsers = new HashSet<StudentOfUser>();
         }
 
-        public int StudentId { get; set; }
+        public string StudentId { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public string FirstName { get; set; }

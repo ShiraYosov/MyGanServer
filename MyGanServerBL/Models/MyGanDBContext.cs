@@ -45,7 +45,7 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Allergy>(entity =>
             {
@@ -113,10 +113,6 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<Group>(entity =>
             {
                 entity.Property(e => e.GroupId).HasColumnName("GroupID");
-
-                entity.Property(e => e.Code)
-                    .IsRequired()
-                    .HasMaxLength(255);
 
                 entity.Property(e => e.GroupName)
                     .IsRequired()
@@ -256,7 +252,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE20438CA84959");
+                    .HasName("PK__StatusTy__C8EE20436C6500A7");
 
                 entity.ToTable("StatusType");
 
@@ -270,7 +266,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<Student>(entity =>
             {
                 entity.Property(e => e.StudentId)
-                    .ValueGeneratedNever()
+                    .HasMaxLength(255)
                     .HasColumnName("StudentID");
 
                 entity.Property(e => e.BirthDate)
@@ -311,7 +307,9 @@ namespace MyGanServerBL.Models
                 entity.HasKey(e => new { e.StudentId, e.AllergyId })
                     .HasName("PK_StudentAllergy");
 
-                entity.Property(e => e.StudentId).HasColumnName("StudentID");
+                entity.Property(e => e.StudentId)
+                    .HasMaxLength(255)
+                    .HasColumnName("StudentID");
 
                 entity.Property(e => e.AllergyId).HasColumnName("AllergyID");
 
@@ -332,7 +330,9 @@ namespace MyGanServerBL.Models
             {
                 entity.HasKey(e => new { e.StudentId, e.UserId });
 
-                entity.Property(e => e.StudentId).HasColumnName("StudentID");
+                entity.Property(e => e.StudentId)
+                    .HasMaxLength(255)
+                    .HasColumnName("StudentID");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -359,7 +359,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534FD08D0EA")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534D62F09C3")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

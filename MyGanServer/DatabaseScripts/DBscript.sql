@@ -2,6 +2,9 @@
 Create Database MyGanDB
 Go
 
+
+
+
 Use MyGanDB
 
 
@@ -77,7 +80,7 @@ RelationType NVARCHAR(255) NOT NULL
 );
 
 create table StudentOfUsers(
-StudentID INT NOT NULL,
+StudentID NVARCHAR(255) NOT NULL,
 CONSTRAINT FK_StudentOfParent FOREIGN KEY (StudentID)
 REFERENCES Students(StudentID),
 UserID INT NOT NULL,
@@ -133,7 +136,7 @@ allergyName NVARCHAR(255) NOT NULL
 );
 
 create table StudentAllergies(
-StudentID INT NOT NULL,
+StudentID NVARCHAR(255) NOT NULL,
 CONSTRAINT FK_StudentAllergiesStudents FOREIGN KEY (StudentID)
 REFERENCES Students(StudentID),
 AllergyID INT NOT NULL,
@@ -185,13 +188,18 @@ VALUES (N'תירס');
 ALTER TABLE Users
 ADD IsApproved BIT DEFAULT 0 NOT NULL
 
+insert into RelationToStudent (RelationType) VALUES (N'אבא')
+insert into RelationToStudent (RelationType) VALUES (N'אמא')
+
+
+
+
 --scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
 select * from Kindergarten
 select * from Groups
-insert into Groups (TeacherID, GroupName, KindergartenID, Code) VALUES (1, 'Kuku', 1, 'code')
+insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kuku', 1)
 select * from RelationToStudent
-insert into RelationToStudent (RelationType) VALUES ('אבא')
-insert into RelationToStudent (RelationType) VALUES ('אמא')
+
 
 select * from Users
 select * from StudentOfUsers
