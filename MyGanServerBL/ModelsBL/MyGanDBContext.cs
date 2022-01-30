@@ -17,7 +17,9 @@ namespace MyGanServerBL.Models
             user = this.Users.
                       Include(g => g.Groups).
                       Include(sou => sou.StudentOfUsers). 
+                      ThenInclude(st => st.Student).
                       Include(km => km.KindergartenManagers).
+                      ThenInclude(k => k.Kindergarten).
                       Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
             return user;
         }

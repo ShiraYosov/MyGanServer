@@ -198,8 +198,9 @@ insert into RelationToStudent (RelationType) VALUES (N'אמא')
 select * from Kindergarten
 select * from Groups
 insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kuku', 1)
-select * from RelationToStudent
+insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kaka', 1)
 
+select * from RelationToStudent
 
 select * from Users
 select * from StudentOfUsers
