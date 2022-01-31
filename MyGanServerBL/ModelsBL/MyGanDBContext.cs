@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using MyGanServerBL.Models;
+using MyGanServerBL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -54,6 +54,16 @@ namespace MyGanServerBL.Models
             }
         }
 
+        public bool StudentExist(string ID)
+        {
+            foreach (Student s in this.Students)
+            {
+                if (s.StudentId == ID)
+                    return true;
+            }
+            return false;
+        }
+
         public bool TeacherRegister(User user)
         {
             try
@@ -80,10 +90,18 @@ namespace MyGanServerBL.Models
             {
                 StudentOfUser studentOfUsers = user.StudentOfUsers.First();
                 Student student = studentOfUsers.Student;
+
                 this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                 this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
 
+                if (StudentExist(student.StudentId))
+                {
+                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                }
+                else
+                {
+                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                }
 
                 this.SaveChanges();
 
