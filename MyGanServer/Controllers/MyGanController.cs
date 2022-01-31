@@ -85,7 +85,7 @@ namespace MyGanServer.Controllers
 
                 try
                 {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", file.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/KidsPhotos", file.FileName);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
                         await file.CopyToAsync(stream);
