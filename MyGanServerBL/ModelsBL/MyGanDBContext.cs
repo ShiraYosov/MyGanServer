@@ -16,7 +16,7 @@ namespace MyGanServerBL.Models
             User user = new User();
             user = this.Users.
                       Include(g => g.Groups).
-                      Include(sou => sou.StudentOfUsers). 
+                      Include(sou => sou.StudentOfUsers).
                       ThenInclude(st => st.Student).
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
@@ -59,6 +59,30 @@ namespace MyGanServerBL.Models
             foreach (Student s in this.Students)
             {
                 if (s.StudentId == ID)
+                    return true;
+            }
+            return false;
+        }
+
+        public List<User> GetTeachersList(Kindergarten k)
+        {
+            List<User> teachers = new List<User>();
+
+            foreach (User user in this.Users)
+            {
+                if (IsTeacherInKindergarten(k, user) && user.IsApproved == false)
+                {
+                    teachers.Add(user);
+                }
+            }
+            return teachers;
+        }
+
+        public bool IsTeacherInKindergarten(Kindergarten k, User u)
+        {
+            foreach (Group g in u.Groups)
+            {
+                if (k.Groups.Contains(g))
                     return true;
             }
             return false;

@@ -68,6 +68,24 @@ namespace MyGanServer.Controllers
             }
         }
 
+        [Route("GetTeachers")]
+        [HttpGet]
+        public List<User> GetTeachers([FromBody] Kindergarten kindergarten)
+        {
+            if (kindergarten != null)
+            {
+                List<User> teachersList = this.context.GetTeachersList(kindergarten);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                 
+                  return teachersList;
+            }
+                
+            else
+                    return null;
+            
+           
+        }
+
 
         [Route("UploadImage")]
         [HttpPost]
