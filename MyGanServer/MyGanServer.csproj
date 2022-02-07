@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -21,6 +21,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyGanServerBL\MyGanServerBL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\k\" />
+    <Folder Include="wwwroot\images\t\" />
   </ItemGroup>
 
 </Project>

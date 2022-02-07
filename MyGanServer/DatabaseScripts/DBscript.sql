@@ -5,12 +5,20 @@ Go
 
 
 
+
+
+
 Use MyGanDB
 
 
 create table Kindergarten(
 KindergartenID INT identity(1,1) PRIMARY KEY NOT NULL,
 Name NVARCHAR(255) NOT NULL
+);
+
+create table StatusType(
+StatusID INT identity(1,1) PRIMARY KEY NOT NULL,
+Description NVARCHAR(255) NOT NULL
 );
 
 create table Users(
@@ -21,6 +29,9 @@ FName NVARCHAR(255) NOT NULL,
 LastName NVARCHAR(255) NOT NULL,
 PhoneNumber NVARCHAR(255) NOT NULL,
 IsSystemManager BIT DEFAULT 0 NOT NULL,
+StatusID INT,
+CONSTRAINT FK_UserStatus FOREIGN KEY (StatusID)
+REFERENCES StatusType(StatusID),
 );
 
 create table Groups(
@@ -103,11 +114,6 @@ REFERENCES Kindergarten(KindergartenID),
 CONSTRAINT PK_KindergartenManager PRIMARY KEY (UserID,KindergartenID)
 );
 
-create table StatusType(
-StatusID INT identity(1,1) PRIMARY KEY NOT NULL,
-Description NVARCHAR(255) NOT NULL
-);
-
 create table Approvals(
 ApprovalID INT PRIMARY KEY NOT NULL,
 CONSTRAINT FK_GroupApproval FOREIGN KEY (ApprovalID)
@@ -185,12 +191,18 @@ VALUES (N'חיטה');
 INSERT INTO Allergies(allergyName)
 VALUES (N'תירס');
 
-ALTER TABLE Users
-ADD IsApproved BIT DEFAULT 0 NOT NULL
 
 insert into RelationToStudent (RelationType) VALUES (N'אבא')
 insert into RelationToStudent (RelationType) VALUES (N'אמא')
 
+INSERT INTO StatusType(Description)
+VALUES (N'נדחה');
+
+INSERT INTO StatusType(Description)
+VALUES (N'מאושר');
+
+INSERT INTO StatusType(Description)
+VALUES (N'בהמתנה');
 
 
 

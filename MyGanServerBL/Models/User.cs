@@ -22,8 +22,9 @@ namespace MyGanServerBL.Models
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsSystemManager { get; set; }
-        public bool IsApproved { get; set; }
+        public int? StatusId { get; set; }
 
+        public virtual StatusType Status { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<KindergartenManager> KindergartenManagers { get; set; }
         public virtual ICollection<Signature> Signatures { get; set; }

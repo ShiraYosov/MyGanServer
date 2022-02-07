@@ -45,7 +45,7 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Allergy>(entity =>
             {
@@ -252,7 +252,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE20436C6500A7");
+                    .HasName("PK__StatusTy__C8EE2043DDA2630E");
 
                 entity.ToTable("StatusType");
 
@@ -359,7 +359,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534D62F09C3")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534C94EDF4A")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -384,6 +384,13 @@ namespace MyGanServerBL.Models
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
                     .HasMaxLength(255);
+
+                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_UserStatus");
             });
 
             OnModelCreatingPartial(modelBuilder);

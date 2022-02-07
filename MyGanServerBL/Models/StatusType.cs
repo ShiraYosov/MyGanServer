@@ -10,11 +10,13 @@ namespace MyGanServerBL.Models
         public StatusType()
         {
             Approvals = new HashSet<Approval>();
+            Users = new HashSet<User>();
         }
 
         public int StatusId { get; set; }
         public string Description { get; set; }
 
         public virtual ICollection<Approval> Approvals { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
