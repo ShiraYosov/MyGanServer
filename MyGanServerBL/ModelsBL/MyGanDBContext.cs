@@ -64,13 +64,15 @@ namespace MyGanServerBL.Models
             return false;
         }
 
+        public const int WAITING_STATUS = 3;
+
         public List<User> GetTeachersList(Kindergarten k)
         {
             List<User> teachers = new List<User>();
 
             foreach (User user in this.Users)
             {
-                if (IsTeacherInKindergarten(k, user) && user.IsApproved == false)
+                if (IsTeacherInKindergarten(k, user) && user.StatusId == WAITING_STATUS)
                 {
                     teachers.Add(user);
                 }

@@ -76,12 +76,16 @@ namespace MyGanServer.Controllers
             {
                 List<User> teachersList = this.context.GetTeachersList(kindergarten);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                 
-                  return teachersList;
+
+                return teachersList;
             }
-                
+
             else
-                    return null;
+            {
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
             
            
         }
