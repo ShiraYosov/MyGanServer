@@ -68,13 +68,15 @@ namespace MyGanServer.Controllers
             }
         }
 
-        [Route("GetTeachers")]
+        [Route("GetTeachersWithWaitStatus")]
         [HttpGet]
-        public List<User> GetTeachers([FromBody] Kindergarten kindergarten)
+        public List<User> GetTeachersWithWaitStatus([FromQuery] int kindergartenID)
         {
-            if (kindergarten != null)
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
             {
-                List<User> teachersList = this.context.GetTeachersList(kindergarten);
+                List<User> teachersList = this.context.GetTeachersList(kindergartenID);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
                 return teachersList;
@@ -83,7 +85,7 @@ namespace MyGanServer.Controllers
             else
             {
 
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
             

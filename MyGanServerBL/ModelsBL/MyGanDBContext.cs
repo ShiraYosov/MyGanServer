@@ -66,13 +66,13 @@ namespace MyGanServerBL.Models
 
         public const int WAITING_STATUS = 3;
 
-        public List<User> GetTeachersList(Kindergarten k)
+        public List<User> GetTeachersList(int kID)
         {
             List<User> teachers = new List<User>();
 
-            foreach (User user in this.Users)
+            foreach (User user in this.Users.Include(g => g.Groups))
             {
-                if (IsTeacherInKindergarten(k, user) && user.StatusId == WAITING_STATUS)
+                if (user.StatusId == WAITING_STATUS && IsTeacherInKindergarten(kID, user))
                 {
                     teachers.Add(user);
                 }
@@ -80,11 +80,12 @@ namespace MyGanServerBL.Models
             return teachers;
         }
 
-        public bool IsTeacherInKindergarten(Kindergarten k, User u)
+        public bool IsTeacherInKindergarten(int kID, User u)
         {
+
             foreach (Group g in u.Groups)
             {
-                if (k.Groups.Contains(g))
+                if (g.KindergartenId == kID)
                     return true;
             }
             return false;
