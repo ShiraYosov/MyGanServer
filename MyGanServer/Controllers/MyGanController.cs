@@ -88,8 +88,40 @@ namespace MyGanServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
-            
-           
+
+
+        }
+
+
+        [Route("ChangeUserStatus")]
+        [HttpPost]
+        public bool ChangeUserStatus( User u/*[FromQuery] int userID*//*,[FromQuery] int statusID*/)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                bool ok = this.context.ChangeStatusForUser(2, u);
+                if(ok)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
+                }
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+                    return false;   
+                }
+            }
+
+            else
+            {
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+
         }
 
 
@@ -171,20 +203,20 @@ namespace MyGanServer.Controllers
             }
         }
 
-       
+
 
         [Route("TeacherRegister")]
         [HttpPost]
         public User TeacherRegister([FromBody] User user)
         {
-            
+
             if (user != null && user.Groups != null && user.Groups.Count == 1)
             {
                 context.TeacherRegister(user);
 
                 HttpContext.Session.SetObject("theUser", user);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                
+
                 return user;
             }
             else
@@ -214,9 +246,9 @@ namespace MyGanServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                     return null;
                 }
-                
 
-                
+
+
             }
             else
             {

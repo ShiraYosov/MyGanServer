@@ -16,8 +16,9 @@ namespace MyGanServerBL.Models
             User user = new User();
             user = this.Users.
                       Include(g => g.Groups).
-                      Include(sou => sou.StudentOfUsers).
-                      ThenInclude(st => st.Student).
+                      ThenInclude( s => s.Students).
+                      ThenInclude(sou => sou.StudentOfUsers).
+                      ThenInclude(u => u.User).
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
                       Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
@@ -111,7 +112,26 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public bool ParentRegister(User user)
+        public bool ChangeStatusForUser(int statusID, User u)
+        {
+            try
+            {
+                User user = new User();
+                user = this.Users.Where(us => us.UserId == u.UserId).FirstOrDefault();
+                user.StatusId = statusID;
+                this.Users.Update(user);
+                this.SaveChanges();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+            public bool ParentRegister(User user)
         {
             try
             {
