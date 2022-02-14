@@ -216,4 +216,4 @@ select * from Students
 select * from KindergartenManagers
 
 UPDATE Users
-SET StatusID= 3 WHERE UserID = 5
+SET StatusID= 3 WHERE UserID = 3

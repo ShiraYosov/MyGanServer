@@ -95,13 +95,13 @@ namespace MyGanServer.Controllers
 
         [Route("ChangeUserStatus")]
         [HttpPost]
-        public bool ChangeUserStatus( User u/*[FromQuery] int userID*//*,[FromQuery] int statusID*/)
+        public bool ChangeUserStatus(User u)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
             if (user != null)
             {
-                bool ok = this.context.ChangeStatusForUser(2, u);
+                bool ok = this.context.ChangeStatusForUser((int)u.StatusId, u);
                 if(ok)
                 {
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
