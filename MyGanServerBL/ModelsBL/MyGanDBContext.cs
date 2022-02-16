@@ -16,11 +16,12 @@ namespace MyGanServerBL.Models
             User user = new User();
             user = this.Users.
                       Include(g => g.Groups).
-                      ThenInclude( s => s.Students).
+                      ThenInclude(s => s.Students).
                       ThenInclude(sou => sou.StudentOfUsers).
                       ThenInclude(u => u.User).
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
+                      ThenInclude(g => g.Groups).
                       Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
             return user;
         }
@@ -71,98 +72,113 @@ namespace MyGanServerBL.Models
         {
             List<User> teachers = new List<User>();
 
-            foreach (User user in this.Users.Include(g => g.Groups))
+            foreach (PendingTeacher teacher in this.PendingTeachers)
             {
-                if (user.StatusId == WAITING_STATUS && IsTeacherInKindergarten(kID, user))
+                if (teacher.StatusId == WAITING_STATUS && IsTeacherInKindergarten(kID, teacher))
                 {
-                    teachers.Add(user);
+                    teachers.Add(teacher.User);
                 }
             }
             return teachers;
         }
 
-        public bool IsTeacherInKindergarten(int kID, User u)
+        public bool IsTeacherInKindergarten(int kID, PendingTeacher teacher)
         {
-
-            foreach (Group g in u.Groups)
-            {
-                if (g.KindergartenId == kID)
-                    return true;
-            }
+            if (teacher.Group.KindergartenId == kID)
+                return true;
+        
             return false;
         }
 
-        public bool TeacherRegister(User user)
+    public bool TeacherRegister(User user)
+    {
+        try
         {
-            try
+            bool added = AddUser(user);
+
+            if (added)
             {
                 Group userGroup = user.Groups.First();
                 user.Groups.Clear();
                 Group g = Groups.Where(g => g.GroupId == userGroup.GroupId).FirstOrDefault();
-                g.Teacher = user;
-                this.Groups.Update(g);
-                this.SaveChanges();
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-        }
-
-        public bool ChangeStatusForUser(int statusID, User u)
-        {
-            try
-            {
-                User user = new User();
-                user = this.Users.Where(us => us.UserId == u.UserId).FirstOrDefault();
-                user.StatusId = statusID;
-                this.Users.Update(user);
-                this.SaveChanges();
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-        }
-
-            public bool ParentRegister(User user)
-        {
-            try
-            {
-                StudentOfUser studentOfUsers = user.StudentOfUsers.First();
-                Student student = studentOfUsers.Student;
-
-                this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-
-                if (StudentExist(student.StudentId))
+                PendingTeacher newTeacher = new PendingTeacher
                 {
-                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                }
-                else
-                {
-                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                }
+                    UserId = user.UserId,
+                    GroupId = g.GroupId,
+                    StatusId = WAITING_STATUS
+                };
 
+                this.PendingTeachers.Add(newTeacher);
                 this.SaveChanges();
+
+                //g.Teacher = user;
+                //this.Groups.Update(g);
 
                 return true;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
+
+            return false;
+
         }
-
-
-
-
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+        }
     }
+
+    public bool ChangeStatusForUser(int statusID, User u)
+    {
+        try
+        {
+            User user = new User();
+            user = this.Users.Where(us => us.UserId == u.UserId).FirstOrDefault();
+            //user.StatusId = statusID;
+            this.Users.Update(user);
+            this.SaveChanges();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+        }
+    }
+
+    public bool ParentRegister(User user)
+    {
+        try
+        {
+            StudentOfUser studentOfUsers = user.StudentOfUsers.First();
+            Student student = studentOfUsers.Student;
+
+            this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+
+            if (StudentExist(student.StudentId))
+            {
+                this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            }
+            else
+            {
+                this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            }
+
+            this.SaveChanges();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+        }
+    }
+
+
+
+
+}
 }

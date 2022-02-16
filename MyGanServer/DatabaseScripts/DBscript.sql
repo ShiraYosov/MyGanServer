@@ -3,7 +3,6 @@ Create Database MyGanDB
 Go
 
 
-
 Use MyGanDB
 
 
@@ -25,10 +24,8 @@ FName NVARCHAR(255) NOT NULL,
 LastName NVARCHAR(255) NOT NULL,
 PhoneNumber NVARCHAR(255) NOT NULL,
 IsSystemManager BIT DEFAULT 0 NOT NULL,
-StatusID INT,
-CONSTRAINT FK_UserStatus FOREIGN KEY (StatusID)
-REFERENCES StatusType(StatusID),
 );
+
 
 create table Groups(
 GroupID INT identity(1,1) PRIMARY KEY NOT NULL,
@@ -39,6 +36,19 @@ GroupName NVARCHAR(255) NOT NULL,
 KindergartenID INT NOT NULL,
 CONSTRAINT FK_KinderGartenGroup FOREIGN KEY (KindergartenID)
 REFERENCES Kindergarten(KindergartenID)
+);
+
+create table PendingTeachers(
+UserID INT NOT NULL,
+CONSTRAINT FK_PendingTeacher FOREIGN KEY (UserID)
+REFERENCES Users(UserID),
+GroupID INT NOT NULL,
+CONSTRAINT FK_PendingTeacherGroup FOREIGN KEY (GroupID)
+REFERENCES Groups(GroupID),
+StatusID INT NOT NULL,
+CONSTRAINT FK_PendingTeacherStatus FOREIGN KEY (StatusID)
+REFERENCES StatusType(StatusID),
+CONSTRAINT PK_PendingTeachers PRIMARY KEY(UserID, GroupID),
 );
 
 create table Events(
@@ -97,7 +107,10 @@ RelationToStudentID INT NOT NULL,
 CONSTRAINT FK_RelationToStudent FOREIGN KEY (RelationToStudentID)
 REFERENCES RelationToStudent(relationToStudentID),
 CONSTRAINT PK_StudentOfUsers PRIMARY KEY (StudentID,UserID),
-Vaad BIT DEFAULT 0 NOT NULL
+Vaad BIT DEFAULT 0 NOT NULL,
+StatusID INT,
+CONSTRAINT FK_UserStatus FOREIGN KEY (StatusID)
+REFERENCES StatusType(StatusID),
 );
 
 create table KindergartenManagers(
@@ -199,6 +212,10 @@ VALUES (N'מאושר');
 
 INSERT INTO StatusType(Description)
 VALUES (N'בהמתנה');
+
+
+
+
 
 
 

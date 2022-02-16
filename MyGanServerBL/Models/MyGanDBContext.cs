@@ -25,6 +25,7 @@ namespace MyGanServerBL.Models
         public virtual DbSet<Kindergarten> Kindergartens { get; set; }
         public virtual DbSet<KindergartenManager> KindergartenManagers { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<PendingTeacher> PendingTeachers { get; set; }
         public virtual DbSet<Photo> Photos { get; set; }
         public virtual DbSet<RelationToStudent> RelationToStudents { get; set; }
         public virtual DbSet<Signature> Signatures { get; set; }
@@ -45,7 +46,7 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Allergy>(entity =>
             {
@@ -189,6 +190,35 @@ namespace MyGanServerBL.Models
                     .HasConstraintName("FK_GroupMessage");
             });
 
+            modelBuilder.Entity<PendingTeacher>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.GroupId });
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
+
+                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.PendingTeachers)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PendingTeacherGroup");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.PendingTeachers)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PendingTeacherStatus");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.PendingTeachers)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PendingTeacher");
+            });
+
             modelBuilder.Entity<Photo>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -252,7 +282,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE2043DDA2630E");
+                    .HasName("PK__StatusTy__C8EE2043910F3E13");
 
                 entity.ToTable("StatusType");
 
@@ -338,11 +368,18 @@ namespace MyGanServerBL.Models
 
                 entity.Property(e => e.RelationToStudentId).HasColumnName("RelationToStudentID");
 
+                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
                 entity.HasOne(d => d.RelationToStudent)
                     .WithMany(p => p.StudentOfUsers)
                     .HasForeignKey(d => d.RelationToStudentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RelationToStudent");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.StudentOfUsers)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_UserStatus");
 
                 entity.HasOne(d => d.Student)
                     .WithMany(p => p.StudentOfUsers)
@@ -359,7 +396,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534C94EDF4A")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534EC02DFA0")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -384,13 +421,6 @@ namespace MyGanServerBL.Models
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
                     .HasMaxLength(255);
-
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_UserStatus");
             });
 
             OnModelCreatingPartial(modelBuilder);

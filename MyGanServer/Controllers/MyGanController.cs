@@ -101,17 +101,18 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                bool ok = this.context.ChangeStatusForUser((int)u.StatusId, u);
-                if(ok)
-                {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    return true;
-                }
-                else
-                {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
-                    return false;   
-                }
+                //bool ok = this.context.ChangeStatusForUser((int)u.StatusId, u);
+                //if(ok)
+                //{
+                //    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                //    return true;
+                //}
+                //else
+                //{
+                //    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+                //    return false;   
+                //}
+                return true;
             }
 
             else
