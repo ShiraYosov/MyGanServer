@@ -231,6 +231,7 @@ select * from Users
 select * from StudentOfUsers
 select * from Students
 select * from KindergartenManagers
+select * from PendingTeachers
 
 UPDATE Users
 SET StatusID= 3 WHERE UserID = 3

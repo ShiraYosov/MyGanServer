@@ -70,13 +70,13 @@ namespace MyGanServer.Controllers
 
         [Route("GetTeachersWithWaitStatus")]
         [HttpGet]
-        public List<User> GetTeachersWithWaitStatus([FromQuery] int kindergartenID)
+        public List<PendingTeacher> GetTeachersWithWaitStatus([FromQuery] int kindergartenID)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
             if (user != null)
             {
-                List<User> teachersList = this.context.GetTeachersList(kindergartenID);
+                List<PendingTeacher> teachersList = this.context.GetTeachersList(kindergartenID);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
                 return teachersList;
@@ -95,23 +95,38 @@ namespace MyGanServer.Controllers
 
         [Route("ChangeUserStatus")]
         [HttpPost]
-        public bool ChangeUserStatus(User u)
+        public bool ChangeUserStatus(object u)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
             if (user != null)
             {
-                //bool ok = this.context.ChangeStatusForUser((int)u.StatusId, u);
-                //if(ok)
-                //{
-                //    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //    return true;
-                //}
-                //else
-                //{
-                //    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
-                //    return false;   
-                //}
+                bool ok;
+                if( u is StudentOfUser)
+                {
+                    StudentOfUser sou = (StudentOfUser)u;
+                     ok = this.context.ChangeStatusForUser(u);
+                    
+                }
+
+                else if (u is PendingTeacher)
+                {
+                    StudentOfUser sou = (StudentOfUser)u;
+                    ok = this.context.ChangeStatusForUser(u);
+
+                }
+
+                if (ok)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
+                }
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+                    return false;
+                }
+               
                 return true;
             }
 

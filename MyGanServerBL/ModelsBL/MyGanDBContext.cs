@@ -68,15 +68,15 @@ namespace MyGanServerBL.Models
 
         public const int WAITING_STATUS = 3;
 
-        public List<User> GetTeachersList(int kID)
+        public List<PendingTeacher> GetTeachersList(int kID)
         {
-            List<User> teachers = new List<User>();
+            List<PendingTeacher> teachers = new List<PendingTeacher>();
 
-            foreach (PendingTeacher teacher in this.PendingTeachers)
+            foreach (PendingTeacher teacher in this.PendingTeachers.Include(t => t.User).Include(g => g.Group))
             {
                 if (teacher.StatusId == WAITING_STATUS && IsTeacherInKindergarten(kID, teacher))
                 {
-                    teachers.Add(teacher.User);
+                    teachers.Add(teacher);
                 }
             }
             return teachers;
@@ -86,18 +86,17 @@ namespace MyGanServerBL.Models
         {
             if (teacher.Group.KindergartenId == kID)
                 return true;
-        
+
             return false;
         }
 
-    public bool TeacherRegister(User user)
-    {
-        try
+        public bool TeacherRegister(User user)
         {
-            bool added = AddUser(user);
-
-            if (added)
+            try
             {
+                this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                SaveChanges();
+
                 Group userGroup = user.Groups.First();
                 user.Groups.Clear();
                 Group g = Groups.Where(g => g.GroupId == userGroup.GroupId).FirstOrDefault();
@@ -116,69 +115,89 @@ namespace MyGanServerBL.Models
                 //this.Groups.Update(g);
 
                 return true;
+
+
+
             }
-
-            return false;
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            return false;
-        }
-    }
-
-    public bool ChangeStatusForUser(int statusID, User u)
-    {
-        try
-        {
-            User user = new User();
-            user = this.Users.Where(us => us.UserId == u.UserId).FirstOrDefault();
-            //user.StatusId = statusID;
-            this.Users.Update(user);
-            this.SaveChanges();
-
-            return true;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            return false;
-        }
-    }
-
-    public bool ParentRegister(User user)
-    {
-        try
-        {
-            StudentOfUser studentOfUsers = user.StudentOfUsers.First();
-            Student student = studentOfUsers.Student;
-
-            this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-            this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-
-            if (StudentExist(student.StudentId))
+            catch (Exception e)
             {
-                this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                Console.WriteLine(e.Message);
+                return false;
             }
-            else
-            {
-                this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-            }
-
-            this.SaveChanges();
-
-            return true;
         }
-        catch (Exception e)
+
+        public bool ChangeStatusForUser(/*int statusID,*/ object u)
         {
-            Console.WriteLine(e.Message);
-            return false;
+            try
+            {
+                if (u is StudentOfUser)
+                {
+                    StudentOfUser sou = (StudentOfUser)u;
+                    StudentOfUser studentOfUser = new StudentOfUser();
+                    studentOfUser = this.StudentOfUsers.Where(s => s.UserId == sou.UserId).FirstOrDefault();
+                    studentOfUser.StatusId = sou.StatusId;
+                    this.StudentOfUsers.Update(studentOfUser);
+                    this.SaveChanges();
+
+                    return true;
+                }
+
+                else if( u is PendingTeacher)
+                {
+                    PendingTeacher pTeacher = (PendingTeacher)u;
+                    PendingTeacher teacher = new PendingTeacher();
+                    teacher = this.PendingTeachers.Where(t => t.UserId == pTeacher.UserId).FirstOrDefault();
+                    teacher.StatusId = pTeacher.StatusId;
+                    this.PendingTeachers.Update(teacher);
+                    this.SaveChanges();
+
+                    return true;
+                }
+
+                else { return false; }
+
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
+
+        public bool ParentRegister(User user)
+        {
+            try
+            {
+                StudentOfUser studentOfUsers = user.StudentOfUsers.First();
+                Student student = studentOfUsers.Student;
+
+                this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+
+                if (StudentExist(student.StudentId))
+                {
+                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                }
+                else
+                {
+                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                }
+
+                this.SaveChanges();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+
+
+
     }
-
-
-
-
-}
 }
