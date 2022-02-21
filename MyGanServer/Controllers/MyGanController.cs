@@ -93,28 +93,16 @@ namespace MyGanServer.Controllers
         }
 
 
-        [Route("ChangeUserStatus")]
+        [Route("ChangeTeacherStatus")]
         [HttpPost]
-        public bool ChangeUserStatus(object u)
+        public bool ChangeTeacherStatus(PendingTeacher t)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
             if (user != null)
             {
-                bool ok;
-                if( u is StudentOfUser)
-                {
-                    StudentOfUser sou = (StudentOfUser)u;
-                     ok = this.context.ChangeStatusForUser(u);
-                    
-                }
-
-                else if (u is PendingTeacher)
-                {
-                    StudentOfUser sou = (StudentOfUser)u;
-                    ok = this.context.ChangeStatusForUser(u);
-
-                }
+               
+                    bool ok = this.context.ChangeStatusForUser(t);
 
                 if (ok)
                 {
@@ -126,8 +114,43 @@ namespace MyGanServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
                     return false;
                 }
-               
-                return true;
+
+                
+            }
+
+            else
+            {
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+
+        }
+
+        [Route("ChangeParentStatus")]
+        [HttpPost]
+        public bool ChangeParentStatus(StudentOfUser s)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+
+                bool ok = this.context.ChangeStatusForUser(s);
+
+                if (ok)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
+                }
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+                    return false;
+                }
+
+
             }
 
             else

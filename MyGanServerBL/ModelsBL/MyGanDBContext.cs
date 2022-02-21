@@ -11,6 +11,11 @@ namespace MyGanServerBL.Models
 {
     partial class MyGanDBContext
     {
+
+        public const int UNPERMITTED_STATUS = 1;
+        public const int PERMITTED_STATUS = 2;
+       
+
         public User Login(string email, string pswd)
         {
             User user = new User();
@@ -111,8 +116,7 @@ namespace MyGanServerBL.Models
                 this.PendingTeachers.Add(newTeacher);
                 this.SaveChanges();
 
-                //g.Teacher = user;
-                //this.Groups.Update(g);
+              
 
                 return true;
 
@@ -126,7 +130,7 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public bool ChangeStatusForUser(/*int statusID,*/ object u)
+        public bool ChangeStatusForUser(object u)
         {
             try
             {
@@ -148,6 +152,17 @@ namespace MyGanServerBL.Models
                     PendingTeacher teacher = new PendingTeacher();
                     teacher = this.PendingTeachers.Where(t => t.UserId == pTeacher.UserId).FirstOrDefault();
                     teacher.StatusId = pTeacher.StatusId;
+
+                    if(teacher.StatusId == PERMITTED_STATUS)
+                    {
+                        Group gr = this.Groups.Where(g => g.GroupId == pTeacher.GroupId).FirstOrDefault();
+                        User teacherUser = this.Users.Where(tu => tu.UserId == pTeacher.UserId).FirstOrDefault();
+                        teacherUser.Groups.Add(gr);
+                        gr.Teacher = teacherUser;
+                        this.Groups.Update(gr);
+                        this.Users.Update(teacherUser);
+                    }
+
                     this.PendingTeachers.Update(teacher);
                     this.SaveChanges();
 
