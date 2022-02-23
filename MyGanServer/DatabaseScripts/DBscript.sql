@@ -234,4 +234,4 @@ select * from KindergartenManagers
 select * from PendingTeachers
 
 UPDATE PendingTeachers
-SET StatusID= 3 WHERE UserID = 3
+SET StatusID= 3 WHERE UserID = 5
