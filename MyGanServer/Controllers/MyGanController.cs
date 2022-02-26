@@ -202,23 +202,70 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public bool AddAllergy([FromBody] Allergy allergy)
         {
-            if (allergy != null)
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
             {
-                bool added = this.context.AddAllergy(allergy);
-                if (added)
+                if (allergy != null)
                 {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    return added;
+                    bool added = this.context.AddAllergy(allergy);
+                    if (added)
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return added;
+                    }
+                    else
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
                 }
                 else
+                {
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return false;
+                    return false;
+                }
             }
             else
             {
+
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
+
+        }
+
+        [Route("AddGroup")]
+        [HttpPost]
+        public bool AddGroup([FromBody] Group group)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                if (group != null)
+                {
+                    bool added = this.context.AddGroup(group);
+                    if (added)
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return added;
+                    }
+                    else
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
+            }
+            else
+            {
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
         }
 
         [Route("Register")]

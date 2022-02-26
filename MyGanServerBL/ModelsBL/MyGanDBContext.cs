@@ -24,6 +24,12 @@ namespace MyGanServerBL.Models
                       ThenInclude(s => s.Students).
                       ThenInclude(sou => sou.StudentOfUsers).
                       ThenInclude(u => u.User).
+                      Include(g => g.Groups).
+                      ThenInclude(s => s.Students).
+                      ThenInclude(sou => sou.StudentOfUsers).
+                      ThenInclude(r => r.RelationToStudent).
+                      Include(st => st.StudentOfUsers).
+                      ThenInclude(s => s.Student).
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
                       ThenInclude(g => g.Groups).
@@ -46,6 +52,21 @@ namespace MyGanServerBL.Models
             }
         }
 
+        public bool AddGroup(Group group)
+        {
+            try
+            {
+                this.Groups.Add(group);
+                this.Entry(group.Teacher).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
         public bool AddUser(User user)
         {
             try
