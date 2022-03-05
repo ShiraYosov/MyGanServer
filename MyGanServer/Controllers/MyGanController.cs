@@ -101,8 +101,8 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-               
-                    bool ok = this.context.ChangeStatusForUser(t);
+
+                bool ok = this.context.ChangeStatusForUser(t);
 
                 if (ok)
                 {
@@ -115,7 +115,7 @@ namespace MyGanServer.Controllers
                     return false;
                 }
 
-                
+
             }
 
             else
@@ -272,14 +272,37 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public User Register([FromBody] User user)
         {
-            //Check user name and password
-            if (user != null)
+            //If user is null the request is bad
+            if (user == null)
             {
-                context.AddUser(user);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
 
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            //Check if user logged in and its ID is the same as the contact user ID
+            if (currentUser != null && currentUser.UserId == user.UserId)
+            {
+                if (user.UserId > 0)
+                {
+                    context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    foreach(KindergartenManager km in user.KindergartenManagers)
+                    {
+                        Kindergarten k = km.Kindergarten;
+                        context.Entry(k).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
+                   
+                }
+                else
+                {
+                    context.AddUser(user);
+                }
+                
+               
                 HttpContext.Session.SetObject("theUser", user);
+                context.SaveChanges();
+
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
                 return user;
             }
             else
