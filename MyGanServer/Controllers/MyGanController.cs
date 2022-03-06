@@ -318,66 +318,94 @@ namespace MyGanServer.Controllers
 
 
 
-    
 
 
 
-    [Route("TeacherRegister")]
-    [HttpPost]
-    public User TeacherRegister([FromBody] User user)
-    {
 
-        if (user != null && user.Groups != null && user.Groups.Count == 1)
+        [Route("TeacherRegister")]
+        [HttpPost]
+        public User TeacherRegister([FromBody] User user)
         {
-            context.TeacherRegister(user);
-
-            HttpContext.Session.SetObject("theUser", user);
-            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-
-            return user;
-        }
-        else
-        {
-            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-            return null;
-        }
-    }
-
-    [Route("ParentRegister")]
-    [HttpPost]
-    public User ParentRegister([FromBody] User user)
-    {
-
-        if (user != null)
-        {
-            bool success = context.ParentRegister(user);
-
-            if (success)
+            //If user is null the request is bad
+            if (user == null)
             {
-                HttpContext.Session.SetObject("theUser", user);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return user;
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
                 return null;
             }
 
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            //Check if user logged in and its ID is the same as the contact user ID
+             if (currentUser != null && currentUser.UserId == user.UserId)
+            {
+                if (user.UserId > 0)
+                {
+                    context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
+                    foreach (PendingTeacher pt in user.PendingTeachers)
+                    {
+                        context.Entry(pt).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
 
+                    HttpContext.Session.SetObject("theUser", user);
+                    context.SaveChanges();
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                    return user;
+
+                }
+            }
+
+            else if (user != null && user.Groups != null && user.Groups.Count == 1)
+            {
+                context.TeacherRegister(user);
+
+                HttpContext.Session.SetObject("theUser", user);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                return user;
+            }
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            
+            
         }
-        else
+
+        [Route("ParentRegister")]
+        [HttpPost]
+        public User ParentRegister([FromBody] User user)
         {
-            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-            return null;
+
+            if (user != null)
+            {
+                bool success = context.ParentRegister(user);
+
+                if (success)
+                {
+                    HttpContext.Session.SetObject("theUser", user);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return user;
+                }
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+
+
+
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
         }
+
+
+
+
     }
-
-
-
-
-}
 
 
 
