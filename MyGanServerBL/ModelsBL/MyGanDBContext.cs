@@ -28,6 +28,9 @@ namespace MyGanServerBL.Models
                       ThenInclude(s => s.Students).
                       ThenInclude(sou => sou.StudentOfUsers).
                       ThenInclude(r => r.RelationToStudent).
+                      Include(g => g.Groups).
+                      ThenInclude(s => s.Students).
+                      ThenInclude(g=> g.Grade).
                       Include(st => st.StudentOfUsers).
                       ThenInclude(s => s.Student).
                       Include(km => km.KindergartenManagers).
