@@ -335,7 +335,7 @@ namespace MyGanServer.Controllers
 
             User currentUser = HttpContext.Session.GetObject<User>("theUser");
             //Check if user logged in and its ID is the same as the contact user ID
-             if (currentUser != null && currentUser.UserId == user.UserId)
+            if (currentUser != null && currentUser.UserId == user.UserId)
             {
                 if (user.UserId > 0)
                 {
@@ -349,34 +349,69 @@ namespace MyGanServer.Controllers
                     HttpContext.Session.SetObject("theUser", user);
                     context.SaveChanges();
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-
-                    return user;
-
                 }
+                return user;
             }
 
             else if (user != null && user.Groups != null && user.Groups.Count == 1)
             {
-                context.TeacherRegister(user);
+                bool success = context.TeacherRegister(user);
 
-                HttpContext.Session.SetObject("theUser", user);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                if (success)
+                {
+                    HttpContext.Session.SetObject("theUser", user);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
-                return user;
+                    return user;
+                }
+
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
             }
 
+            else
+            {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
-            
-            
+            }
+
+
         }
 
         [Route("ParentRegister")]
         [HttpPost]
         public User ParentRegister([FromBody] User user)
         {
+            //If user is null the request is bad
+            if (user == null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
 
-            if (user != null)
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            //Check if user logged in and its ID is the same as the contact user ID
+            if (currentUser != null && currentUser.UserId == user.UserId)
+            {
+                context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+                foreach (StudentOfUser sou in user.StudentOfUsers)
+                {
+                    context.Entry(sou.Student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                }
+
+                HttpContext.Session.SetObject("theUser", user);
+                context.SaveChanges();
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                return user;
+            }
+
+
+            else if (user != null)
             {
                 bool success = context.ParentRegister(user);
 
@@ -391,19 +426,14 @@ namespace MyGanServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                     return null;
                 }
-
-
-
             }
+
             else
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
         }
-
-
-
 
     }
 

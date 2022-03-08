@@ -24,18 +24,24 @@ namespace MyGanServerBL.Models
                       ThenInclude(s => s.Students).
                       ThenInclude(sou => sou.StudentOfUsers).
                       ThenInclude(u => u.User).
+
+                      Include(sou => sou.StudentOfUsers).
+                      ThenInclude(s=> s.Student).
+                      ThenInclude(g=> g.Group).
+
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
                       ThenInclude(sou => sou.StudentOfUsers).
                       ThenInclude(r => r.RelationToStudent).
+
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
                       ThenInclude(g=> g.Grade).
-                      Include(st => st.StudentOfUsers).
-                      ThenInclude(s => s.Student).
+                      
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
                       ThenInclude(g => g.Groups).
+
                       Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
             return user;
         }
