@@ -211,24 +211,30 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public bool ParentRegister(User user)
+        public bool ParentRegister(User user, Student student)
         {
             try
             {
-                StudentOfUser studentOfUsers = user.StudentOfUsers.First();
-                Student student = studentOfUsers.Student;
-
+                
                 this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                this.Entry(studentOfUsers).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-
-                if (StudentExist(student.StudentId))
-                {
-                    this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                }
-                else
+                
+                if (!StudentExist(student.StudentId))
                 {
                     this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    foreach (StudentAllergy alerrgy in student.StudentAllergies)
+                    {
+                        alerrgy.AllergyId = alerrgy.Allergy.AllergyId;
+                        this.Entry(alerrgy).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    }
                 }
+
+                StudentOfUser stu = new StudentOfUser()
+                {
+                    StudentId = student.StudentId,
+                    UserId = user.UserId
+                };
+
+                this.Entry(stu).State = Microsoft.EntityFrameworkCore.EntityState.Added;
 
                 this.SaveChanges();
 

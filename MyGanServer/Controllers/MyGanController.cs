@@ -383,28 +383,56 @@ namespace MyGanServer.Controllers
 
         [Route("ParentRegister")]
         [HttpPost]
-        public User ParentRegister([FromBody] User user)
+        public User ParentRegister([FromBody] RegisterUserDto register)
         {
             //If user is null the request is bad
-            if (user == null)
+            if (register == null || register.User == null || register.Student == null)
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
                 return null;
             }
 
             User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            User user = register.User;
+            Student student = register.Student;
+            
             //Check if user logged in and its ID is the same as the contact user ID
             if (currentUser != null && currentUser.UserId == user.UserId)
             {
-                context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-
-                foreach (StudentOfUser sou in user.StudentOfUsers)
+                //delete all allergies before adding them back for the student
+                List<StudentAllergy> allergies = context.StudentAllergies.Where(al => al.StudentId == student.StudentId).ToList();
+                foreach(StudentAllergy sa in allergies)
                 {
-                    context.Entry(sou.Student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    context.Entry(sa).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
+                context.SaveChanges();
+
+                try
+                {
+                    context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+                    context.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    foreach (StudentAllergy alerrgy in student.StudentAllergies)
+                    {
+                        alerrgy.AllergyId = alerrgy.Allergy.AllergyId;
+                        context.Entry(alerrgy).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    }
+
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    foreach (StudentAllergy sa in allergies)
+                    {
+                        context.Entry(sa).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    }
+                    context.SaveChanges();
+                }
+                
 
                 HttpContext.Session.SetObject("theUser", user);
-                context.SaveChanges();
+                
+                
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
                 return user;
@@ -413,7 +441,7 @@ namespace MyGanServer.Controllers
 
             else if (user != null)
             {
-                bool success = context.ParentRegister(user);
+                bool success = context.ParentRegister(user, student);
 
                 if (success)
                 {
