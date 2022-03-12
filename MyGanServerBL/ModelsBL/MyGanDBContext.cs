@@ -14,7 +14,7 @@ namespace MyGanServerBL.Models
 
         public const int UNPERMITTED_STATUS = 1;
         public const int PERMITTED_STATUS = 2;
-       
+
 
         public User Login(string email, string pswd)
         {
@@ -26,8 +26,8 @@ namespace MyGanServerBL.Models
                       ThenInclude(u => u.User).
 
                       Include(sou => sou.StudentOfUsers).
-                      ThenInclude(s=> s.Student).
-                      ThenInclude(g=> g.Group).
+                      ThenInclude(s => s.Student).
+                      ThenInclude(g => g.Group).
 
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
@@ -36,8 +36,17 @@ namespace MyGanServerBL.Models
 
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
-                      ThenInclude(g=> g.Grade).
-                      
+                      ThenInclude(g => g.Grade).
+
+                      Include(st => st.StudentOfUsers).
+                      ThenInclude(s => s.Student).
+                      ThenInclude(sa => sa.StudentAllergies).
+                      ThenInclude(a => a.Allergy).
+
+                      Include(sou => sou.StudentOfUsers).
+                      ThenInclude(s => s.Student).
+                      ThenInclude(g => g.Grade).
+
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
                       ThenInclude(g => g.Groups).
@@ -146,7 +155,7 @@ namespace MyGanServerBL.Models
                 this.PendingTeachers.Add(newTeacher);
                 this.SaveChanges();
 
-              
+
 
                 return true;
 
@@ -176,14 +185,14 @@ namespace MyGanServerBL.Models
                     return true;
                 }
 
-                else if( u is PendingTeacher)
+                else if (u is PendingTeacher)
                 {
                     PendingTeacher pTeacher = (PendingTeacher)u;
                     PendingTeacher teacher = new PendingTeacher();
                     teacher = this.PendingTeachers.Where(t => t.UserId == pTeacher.UserId).FirstOrDefault();
                     teacher.StatusId = pTeacher.StatusId;
 
-                    if(teacher.StatusId == PERMITTED_STATUS)
+                    if (teacher.StatusId == PERMITTED_STATUS)
                     {
                         Group gr = this.Groups.Where(g => g.GroupId == pTeacher.GroupId).FirstOrDefault();
                         User teacherUser = this.Users.Where(tu => tu.UserId == pTeacher.UserId).FirstOrDefault();
@@ -215,9 +224,9 @@ namespace MyGanServerBL.Models
         {
             try
             {
-                
+
                 this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                
+
                 if (!StudentExist(student.StudentId))
                 {
                     this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
