@@ -198,6 +198,33 @@ namespace MyGanServer.Controllers
             return Forbid();
         }
 
+        [Route("AddGroup")]
+        [HttpPost]
+
+        public bool AddGroup([FromBody] Group group)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                if (!context.Groups.Contains(group))
+                {
+                    context.Entry(group).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+
+                }
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+        }
+
+
         [Route("AddAllergy")]
         [HttpPost]
         public bool AddAllergy([FromBody] Allergy allergy)
@@ -233,40 +260,40 @@ namespace MyGanServer.Controllers
 
         }
 
-        [Route("AddGroup")]
-        [HttpPost]
-        public bool AddGroup([FromBody] Group group)
-        {
-            User user = HttpContext.Session.GetObject<User>("theUser");
+        //[Route("AddGroup")]
+        //[HttpPost]
+        //public bool AddGroup([FromBody] Group group)
+        //{
+        //    User user = HttpContext.Session.GetObject<User>("theUser");
 
-            if (user != null)
-            {
-                if (group != null)
-                {
-                    bool added = this.context.AddGroup(group);
-                    if (added)
-                    {
-                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                        return added;
-                    }
-                    else
-                        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return false;
-                }
-                else
-                {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return false;
-                }
-            }
-            else
-            {
+        //    if (user != null)
+        //    {
+        //        if (group != null)
+        //        {
+        //            bool added = this.context.AddGroup(group);
+        //            if (added)
+        //            {
+        //                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+        //                return added;
+        //            }
+        //            else
+        //                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+        //            return false;
+        //        }
+        //        else
+        //        {
+        //            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+        //            return false;
+        //        }
+        //    }
+        //    else
+        //    {
 
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return false;
-            }
+        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+        //        return false;
+        //    }
 
-        }
+        //}
 
         [Route("Register")]
         [HttpPost]
@@ -395,13 +422,13 @@ namespace MyGanServer.Controllers
             User currentUser = HttpContext.Session.GetObject<User>("theUser");
             User user = register.User;
             Student student = register.Student;
-            
+
             //Check if user logged in and its ID is the same as the contact user ID
             if (currentUser != null && currentUser.UserId == user.UserId)
             {
                 //delete all allergies before adding them back for the student
                 List<StudentAllergy> allergies = context.StudentAllergies.Where(al => al.StudentId == student.StudentId).ToList();
-                foreach(StudentAllergy sa in allergies)
+                foreach (StudentAllergy sa in allergies)
                 {
                     context.Entry(sa).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
@@ -428,11 +455,11 @@ namespace MyGanServer.Controllers
                     }
                     context.SaveChanges();
                 }
-                
+
 
                 HttpContext.Session.SetObject("theUser", user);
-                
-                
+
+
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
                 return user;
