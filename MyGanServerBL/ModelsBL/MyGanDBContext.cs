@@ -50,6 +50,7 @@ namespace MyGanServerBL.Models
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
                       ThenInclude(g => g.Groups).
+                      ThenInclude(s => s.Students).
 
                       Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
             return user;
@@ -240,12 +241,12 @@ namespace MyGanServerBL.Models
                         this.Entry(allergy).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                     }
 
-                    StudentOfUser st = user.StudentOfUsers.Where(s => s.StudentId == student.StudentId).FirstOrDefault();
+                    StudentOfUser st = user.StudentOfUsers.Where(s => s.Student.StudentId == student.StudentId).FirstOrDefault();
                     StudentOfUser stu = new StudentOfUser()
                     {
                         StudentId = student.StudentId,
                         UserId = user.UserId,
-                        RelationToStudentId = st.RelationToStudentId,
+                        RelationToStudent = st.RelationToStudent,
                         StatusId = st.StatusId
 
                     };
