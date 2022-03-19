@@ -43,6 +43,11 @@ namespace MyGanServerBL.Models
                       ThenInclude(sa => sa.StudentAllergies).
                       ThenInclude(a => a.Allergy).
 
+                      Include(km => km.KindergartenManagers).
+                      ThenInclude(k => k.Kindergarten).
+                      ThenInclude(g => g.Groups).
+                      ThenInclude(t => t.Teacher).
+
                       Include(sou => sou.StudentOfUsers).
                       ThenInclude(s => s.Student).
                       ThenInclude(g => g.Grade).
@@ -51,8 +56,22 @@ namespace MyGanServerBL.Models
                       ThenInclude(k => k.Kindergarten).
                       ThenInclude(g => g.Groups).
                       ThenInclude(s => s.Students).
+                      ThenInclude(u => u.StudentOfUsers).
+                      ThenInclude(u => u.User).
+                      ThenInclude(su => su.StudentOfUsers).
+                      ThenInclude(s => s.Student).
+                      ThenInclude(g => g.Grade).
 
-                      Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
+                      Include(km => km.KindergartenManagers).
+                      ThenInclude(k => k.Kindergarten).
+                      ThenInclude(g => g.Groups).
+                      ThenInclude(s => s.Students).
+                      ThenInclude(u => u.StudentOfUsers).
+                      ThenInclude(r => r.RelationToStudent)
+
+                      .Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
+
+
             return user;
         }
 
@@ -234,7 +253,7 @@ namespace MyGanServerBL.Models
                 {
                     this.ChangeTracker.Clear();
                     this.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    
+
                     foreach (StudentAllergy allergy in student.StudentAllergies)
                     {
                         allergy.AllergyId = allergy.Allergy.AllergyId;
@@ -256,7 +275,7 @@ namespace MyGanServerBL.Models
                     this.SaveChanges();
                 }
 
-                
+
 
                 return true;
             }
