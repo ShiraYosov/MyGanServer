@@ -90,21 +90,7 @@ namespace MyGanServerBL.Models
             }
         }
 
-        public bool AddGroup(Group group)
-        {
-            try
-            {
-                this.Groups.Add(group);
-                this.Entry(group.Teacher).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                this.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-        }
+        
         public bool AddUser(User user)
         {
             try

@@ -201,7 +201,7 @@ namespace MyGanServer.Controllers
         [Route("AddGroup")]
         [HttpPost]
 
-        public bool AddGroup([FromBody] Group group)
+        public Group AddGroup([FromBody] Group group)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
@@ -210,6 +210,35 @@ namespace MyGanServer.Controllers
                 if (!context.Groups.Contains(group))
                 {
                     context.Entry(group).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    
+                    context.SaveChanges();
+
+                }
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return group;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+
+        }
+
+        [Route("AddManager")]
+        [HttpPost]
+
+        public bool AddManager([FromBody] KindergartenManager kManager)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                if (!context.KindergartenManagers.Contains(kManager))
+                {
+                    context.Entry(kManager).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    //context.Kindergartens.Update(group.Kindergarten);
+
                     context.SaveChanges();
 
                 }
@@ -260,40 +289,7 @@ namespace MyGanServer.Controllers
 
         }
 
-        //[Route("AddGroup")]
-        //[HttpPost]
-        //public bool AddGroup([FromBody] Group group)
-        //{
-        //    User user = HttpContext.Session.GetObject<User>("theUser");
-
-        //    if (user != null)
-        //    {
-        //        if (group != null)
-        //        {
-        //            bool added = this.context.AddGroup(group);
-        //            if (added)
-        //            {
-        //                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-        //                return added;
-        //            }
-        //            else
-        //                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-        //            return false;
-        //        }
-        //        else
-        //        {
-        //            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-        //            return false;
-        //        }
-        //    }
-        //    else
-        //    {
-
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-        //        return false;
-        //    }
-
-        //}
+        
 
         [Route("Register")]
         [HttpPost]
