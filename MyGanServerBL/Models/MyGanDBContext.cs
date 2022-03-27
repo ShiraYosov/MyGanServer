@@ -171,21 +171,21 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.Property(e => e.MessageId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MessageID");
+                entity.Property(e => e.MessageId).HasColumnName("MessageID");
 
                 entity.Property(e => e.Content)
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
+
                 entity.Property(e => e.MessageDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(d => d.MessageNavigation)
-                    .WithOne(p => p.Message)
-                    .HasForeignKey<Message>(d => d.MessageId)
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.GroupId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GroupMessage");
             });
@@ -235,11 +235,19 @@ namespace MyGanServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.Photos)
                     .HasForeignKey(d => d.EventId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EventPhotos");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Photos)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserPhoto");
             });
 
             modelBuilder.Entity<RelationToStudent>(entity =>
@@ -282,7 +290,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE2043910F3E13");
+                    .HasName("PK__StatusTy__C8EE2043084DB1A3");
 
                 entity.ToTable("StatusType");
 
@@ -396,7 +404,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534EC02DFA0")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534D058E5BD")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

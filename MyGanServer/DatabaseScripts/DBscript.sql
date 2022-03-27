@@ -64,6 +64,9 @@ REFERENCES Groups(GroupID)
 create table Photos(
 ID INT identity(1,1) PRIMARY KEY NOT NULL,
 Type NVARCHAR(255) NOT NULL,
+UserID INT NOT NULL,
+CONSTRAINT FK_UserPhoto FOREIGN KEY (UserID)
+REFERENCES Users(UserID),
 Description NVARCHAR(255) NOT NULL,
 Date DATETIME NOT NULL,
 EventID INT NOT NULL,
@@ -161,9 +164,13 @@ CONSTRAINT PK_StudentAllergy PRIMARY KEY(StudentID, AllergyID)
 );
 
 create table Messages(
-MessageID INT PRIMARY KEY NOT NULL,
-CONSTRAINT FK_GroupMessage FOREIGN KEY (MessageID)
+MessageID INT identity(1,1) PRIMARY KEY NOT NULL,
+GroupID INT NOT NULL,
+CONSTRAINT FK_GroupMessage FOREIGN KEY (GroupID)
 REFERENCES Groups(GroupID),
+UserID INT NOT NULL,
+CONSTRAINT FK_UserMessage FOREIGN KEY (UserID)
+REFERENCES Groups(UserID),
 Content NVARCHAR(255) NOT NULL,
 MessageDate DATETIME NOT NULL DEFAULT GETDATE(),
 );
@@ -221,9 +228,12 @@ VALUES (N'בהמתנה');
 
 --scaffold-dbcontext "Server=localhost\sqlexpress;Database=MyGanDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
 select * from Kindergarten
+Select * from Messages
 select * from Groups
+
 insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kuku', 1)
 insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kaka', 1)
+insert into Messages (GroupID,Content) VALUES (3,'Hiiii')
 
 select * from RelationToStudent
 

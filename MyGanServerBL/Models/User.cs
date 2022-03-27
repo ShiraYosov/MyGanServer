@@ -12,6 +12,7 @@ namespace MyGanServerBL.Models
             Groups = new HashSet<Group>();
             KindergartenManagers = new HashSet<KindergartenManager>();
             PendingTeachers = new HashSet<PendingTeacher>();
+            Photos = new HashSet<Photo>();
             Signatures = new HashSet<Signature>();
             StudentOfUsers = new HashSet<StudentOfUser>();
         }
@@ -27,6 +28,7 @@ namespace MyGanServerBL.Models
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<KindergartenManager> KindergartenManagers { get; set; }
         public virtual ICollection<PendingTeacher> PendingTeachers { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<Signature> Signatures { get; set; }
         public virtual ICollection<StudentOfUser> StudentOfUsers { get; set; }
     }

@@ -68,6 +68,25 @@ namespace MyGanServer.Controllers
             }
         }
 
+        [Route("CodeExist")]
+        [HttpGet]
+        public bool CodeExist([FromBody] int code)
+        {
+            try
+            {
+               foreach(Group g in context.Groups)
+                {
+                    if(g.GroupId == code) { return true; }
+                }
+                return false;
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
         [Route("GetTeachersWithWaitStatus")]
         [HttpGet]
         public List<PendingTeacher> GetTeachersWithWaitStatus([FromQuery] int kindergartenID)
