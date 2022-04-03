@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using MyGanServerBL.Models;
 using MyGanServer.DTO;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using MyGanServer.Helper;
 
 namespace MyGanServer.Controllers
 {
@@ -21,6 +24,28 @@ namespace MyGanServer.Controllers
             this.context = context;
         }
         #endregion
+
+        //Random string
+        public static string GenerateAlphanumerical(int size)
+        {
+            char[] chars =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            byte[] data = new byte[4 * size];
+            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetBytes(data);
+            }
+            StringBuilder result = new StringBuilder(size);
+            for (int i = 0; i < size; i++)
+            {
+                var rnd = BitConverter.ToUInt32(data, i * 4);
+                var idx = rnd % chars.Length;
+
+                result.Append(chars[idx]);
+            }
+            return result.ToString();
+        }
+
 
 
         [Route("Login")]
@@ -244,6 +269,57 @@ namespace MyGanServer.Controllers
 
         }
 
+        [Route("SendMessage")]
+        [HttpPost]
+
+        public Message SendMessage([FromBody] Message message)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                    context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+
+                    context.SaveChanges();
+
+                
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return message;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+
+        }
+
+        [Route("DeleteMessage")]
+        [HttpPost]
+
+        public bool DeleteMessage([FromBody] int messageID)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                Message toDelete = context.Messages.Where(m => m.MessageId == messageID).FirstOrDefault();
+                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+
+                context.SaveChanges();
+
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+        }
+
         [Route("AddManager")]
         [HttpPost]
 
@@ -277,10 +353,7 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public bool AddAllergy([FromBody] Allergy allergy)
         {
-            User user = HttpContext.Session.GetObject<User>("theUser");
-
-            if (user != null)
-            {
+          
                 if (allergy != null)
                 {
                     bool added = this.context.AddAllergy(allergy);
@@ -298,14 +371,8 @@ namespace MyGanServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return false;
                 }
-            }
-            else
-            {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return false;
-            }
-
+          
+           
         }
 
         
@@ -346,6 +413,10 @@ namespace MyGanServer.Controllers
 
             else if (user != null)
             {
+                if(string.IsNullOrEmpty(user.Password))
+                {
+                    user.Password = GenerateAlphanumerical(6);
+                }
                 context.AddUser(user);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return user;
