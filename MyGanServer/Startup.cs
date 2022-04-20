@@ -50,7 +50,7 @@ namespace MyGanServer
             string connectionString = this.Configuration.GetConnectionString("MyGanDB");
 
             services.AddDbContext<MyGanDBContext>(options => options
-                                                                .UseSqlServer(connectionString).UseLazyLoadingProxies());
+                                                                .UseSqlServer(connectionString));
             //.UseLazyLoadingProxies());
             #endregion
         }

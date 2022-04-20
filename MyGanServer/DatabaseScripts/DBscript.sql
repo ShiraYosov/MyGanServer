@@ -55,7 +55,6 @@ create table Events(
 EventID INT identity(1,1) PRIMARY KEY NOT NULL,
 EventName NVARCHAR (250) NOT NULL,
 EventDate DATETIME NOT NULL DEFAULT GETDATE(),
-Duration INT NOT NULL,
 GroupID INT NOT NULL,
 CONSTRAINT FK_GroupEvent FOREIGN KEY (GroupID)
 REFERENCES Groups(GroupID)
@@ -244,9 +243,12 @@ select * from Students
 select * from KindergartenManagers
 select * from PendingTeachers
 select * from StudentAllergies
+select * from Events
+
+DELETE Users WHERE UserID = 10
 
 UPDATE PendingTeachers
-SET StatusID= 3 WHERE UserID = 5
+SET StatusID= 3 WHERE UserID = 6
 select * from RelationToStudent
 
 select * from Users

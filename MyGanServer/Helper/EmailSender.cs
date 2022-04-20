@@ -9,7 +9,7 @@ namespace MyGanServer.Helper
 {
     public class EmailSender
     {
-        static void SendEmail(string subject, string body, string to, string toName, string from, string fromName, string pswd, string smtpUrl)
+        public static void SendEmail(string subject, string body, string to, string toName, string from, string fromName, string pswd, string smtpUrl)
         {
             var fromAddress = new MailAddress(from, fromName);
             var toAddress = new MailAddress(to, toName);

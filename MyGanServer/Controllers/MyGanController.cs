@@ -25,6 +25,7 @@ namespace MyGanServer.Controllers
         }
         #endregion
 
+
         //Random string
         public static string GenerateAlphanumerical(int size)
         {
@@ -99,9 +100,9 @@ namespace MyGanServer.Controllers
         {
             try
             {
-               foreach(Group g in context.Groups)
+                foreach (Group g in context.Groups)
                 {
-                    if(g.GroupId == code) { return true; }
+                    if (g.GroupId == code) { return true; }
                 }
                 return false;
             }
@@ -254,12 +255,44 @@ namespace MyGanServer.Controllers
                 if (!context.Groups.Contains(group))
                 {
                     context.Entry(group).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    
+
                     context.SaveChanges();
 
                 }
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return group;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+
+        }
+
+        [Route("AddEvent")]
+        [HttpPost]
+
+        public Event AddEvent([FromBody] Event ev)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                try
+                {
+                    context.Entry(ev).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return ev;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+                 
             }
             else
             {
@@ -278,11 +311,11 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                    context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
 
-                    context.SaveChanges();
+                context.SaveChanges();
 
-                
+
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return message;
             }
@@ -353,29 +386,29 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public bool AddAllergy([FromBody] Allergy allergy)
         {
-          
-                if (allergy != null)
+
+            if (allergy != null)
+            {
+                bool added = this.context.AddAllergy(allergy);
+                if (added)
                 {
-                    bool added = this.context.AddAllergy(allergy);
-                    if (added)
-                    {
-                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                        return added;
-                    }
-                    else
-                        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return false;
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return added;
                 }
                 else
-                {
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return false;
-                }
-          
-           
+                return false;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+
         }
 
-        
+
 
         [Route("Register")]
         [HttpPost]
@@ -413,9 +446,16 @@ namespace MyGanServer.Controllers
 
             else if (user != null)
             {
-                if(string.IsNullOrEmpty(user.Password))
+                if (string.IsNullOrEmpty(user.Password))
                 {
                     user.Password = GenerateAlphanumerical(6);
+                    context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.Entry(user.KindergartenManagers.Last()).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+
+                    EmailSender.SendEmail("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return user;
                 }
                 context.AddUser(user);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;

@@ -34,9 +34,23 @@ namespace MyGanServerBL.Models
                       ThenInclude(sou => sou.StudentOfUsers).
                       ThenInclude(r => r.RelationToStudent).
 
+                      Include(k => k.KindergartenManagers).
+                      ThenInclude(ki => ki.Kindergarten).
+                      ThenInclude(g => g.Groups).
+                      ThenInclude(e => e.Events).
+
+                      Include(g => g.Groups).
+                      ThenInclude(e => e.Events).
+                      
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
                       ThenInclude(g => g.Grade).
+
+                      Include(s=> s.StudentOfUsers).
+                      ThenInclude(st => st.Student).
+                      ThenInclude(g => g.Group).
+                      ThenInclude(m => m.Messages).
+                      ThenInclude(u => u.User).
 
                       Include(st => st.StudentOfUsers).
                       ThenInclude(s => s.Student).
@@ -51,6 +65,10 @@ namespace MyGanServerBL.Models
                       Include(sou => sou.StudentOfUsers).
                       ThenInclude(s => s.Student).
                       ThenInclude(g => g.Grade).
+
+                      Include(g => g.Groups).
+                      ThenInclude(m => m.Messages).
+                      ThenInclude(u => u.User).
 
                       Include(km => km.KindergartenManagers).
                       ThenInclude(k => k.Kindergarten).
