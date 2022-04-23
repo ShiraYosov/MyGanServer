@@ -84,7 +84,8 @@ namespace MyGanServerBL.Models
                 entity.Property(e => e.EventId).HasColumnName("EventID");
 
                 entity.Property(e => e.EventDate)
-                    .HasColumnType("datetime")
+                    .IsRequired()
+                    .HasMaxLength(250)
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.EventName)
@@ -231,17 +232,11 @@ namespace MyGanServerBL.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(255);
 
                 entity.Property(e => e.EventId).HasColumnName("EventID");
-
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(255);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -298,7 +293,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE204351CA20B7");
+                    .HasName("PK__StatusTy__C8EE2043C7FDBBC3");
 
                 entity.ToTable("StatusType");
 
@@ -412,7 +407,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D105349F44F23F")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D105342BEDB066")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

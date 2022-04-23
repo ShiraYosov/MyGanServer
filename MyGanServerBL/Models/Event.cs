@@ -14,8 +14,7 @@ namespace MyGanServerBL.Models
 
         public int EventId { get; set; }
         public string EventName { get; set; }
-        public DateTime EventDate { get; set; }
-        public int Duration { get; set; }
+        public string EventDate { get; set; }
         public int GroupId { get; set; }
 
         public virtual Group Group { get; set; }

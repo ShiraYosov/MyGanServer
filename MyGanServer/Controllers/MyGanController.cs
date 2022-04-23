@@ -302,6 +302,38 @@ namespace MyGanServer.Controllers
 
         }
 
+        [Route("AddPhoto")]
+        [HttpPost]
+
+        public Photo AddPhoto([FromBody] Photo photo)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                try
+                {
+                    context.Entry(photo).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return photo;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+
+        }
+
         [Route("SendMessage")]
         [HttpPost]
 
@@ -337,6 +369,58 @@ namespace MyGanServer.Controllers
             if (user != null)
             {
                 Message toDelete = context.Messages.Where(m => m.MessageId == messageID).FirstOrDefault();
+                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+
+                context.SaveChanges();
+
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+        }
+
+        [Route("DeleteEvent")]
+        [HttpPost]
+
+        public bool DeleteEvent([FromBody] int eventID)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                Event toDelete = context.Events.Where(e => e.EventId == eventID).FirstOrDefault();
+                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+
+                context.SaveChanges();
+
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+        }
+
+        [Route("DeletePhoto")]
+        [HttpPost]
+
+        public bool DeletePhoto([FromBody] int photoID)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                Photo toDelete = context.Photos.Where(p => p.Id == photoID).FirstOrDefault();
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
 
                 context.SaveChanges();
@@ -575,6 +659,7 @@ namespace MyGanServer.Controllers
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     foreach (StudentAllergy sa in allergies)
                     {
                         context.Entry(sa).State = Microsoft.EntityFrameworkCore.EntityState.Added;

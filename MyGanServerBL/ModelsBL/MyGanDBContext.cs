@@ -38,10 +38,12 @@ namespace MyGanServerBL.Models
                       ThenInclude(ki => ki.Kindergarten).
                       ThenInclude(g => g.Groups).
                       ThenInclude(e => e.Events).
+                      ThenInclude(p => p.Photos).
 
                       Include(g => g.Groups).
                       ThenInclude(e => e.Events).
-                      
+                      ThenInclude(p => p.Photos).
+
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
                       ThenInclude(g => g.Grade).

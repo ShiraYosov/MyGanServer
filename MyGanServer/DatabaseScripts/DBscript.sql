@@ -54,7 +54,7 @@ CONSTRAINT PK_PendingTeachers PRIMARY KEY(UserID, GroupID),
 create table Events(
 EventID INT identity(1,1) PRIMARY KEY NOT NULL,
 EventName NVARCHAR (250) NOT NULL,
-EventDate DATETIME NOT NULL DEFAULT GETDATE(),
+EventDate NVARCHAR (250) NOT NULL DEFAULT GETDATE(),
 GroupID INT NOT NULL,
 CONSTRAINT FK_GroupEvent FOREIGN KEY (GroupID)
 REFERENCES Groups(GroupID)
@@ -62,12 +62,11 @@ REFERENCES Groups(GroupID)
 
 create table Photos(
 ID INT identity(1,1) PRIMARY KEY NOT NULL,
-Type NVARCHAR(255) NOT NULL,
 UserID INT NOT NULL,
 CONSTRAINT FK_UserPhoto FOREIGN KEY (UserID)
 REFERENCES Users(UserID),
+Name NVARCHAR(255) NOT NULL,
 Description NVARCHAR(255) NOT NULL,
-Date DATETIME NOT NULL,
 EventID INT NOT NULL,
 CONSTRAINT FK_EventPhotos FOREIGN KEY (EventID)
 REFERENCES Events(EventID),
@@ -183,9 +182,6 @@ VALUES (N'טרום חובה');
 
 INSERT INTO Grade(GradeName)
 VALUES (N'טרום טרום חובה');
-
-INSERT INTO Users(Email,Password,FName,LastName,PhoneNumber,IsSystemManager)
-VALUES('Shira@gmail.com','shira',N'שירה',N'יוסוב','0544963452',1);
 
 
 INSERT INTO Allergies(allergyName)
