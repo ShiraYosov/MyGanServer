@@ -46,7 +46,7 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Allergy>(entity =>
             {
@@ -238,6 +238,10 @@ namespace MyGanServerBL.Models
 
                 entity.Property(e => e.EventId).HasColumnName("EventID");
 
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Event)
@@ -293,7 +297,7 @@ namespace MyGanServerBL.Models
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE2043C7FDBBC3");
+                    .HasName("PK__StatusTy__C8EE20437AF793F8");
 
                 entity.ToTable("StatusType");
 
@@ -407,7 +411,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D105342BEDB066")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534A5D77BA6")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

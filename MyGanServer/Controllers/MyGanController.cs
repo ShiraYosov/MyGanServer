@@ -292,7 +292,7 @@ namespace MyGanServer.Controllers
                     Console.WriteLine(ex.Message);
                     return null;
                 }
-                 
+
             }
             else
             {
@@ -362,14 +362,15 @@ namespace MyGanServer.Controllers
         [Route("DeleteMessage")]
         [HttpPost]
 
-        public bool DeleteMessage([FromBody] int messageID)
+        public bool DeleteMessage([FromBody] Message message)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
             if (user != null)
             {
-                Message toDelete = context.Messages.Where(m => m.MessageId == messageID).FirstOrDefault();
+                Message toDelete = context.Messages.Where(m => m.MessageId == message.MessageId).FirstOrDefault();
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                context.Entry(message.Group.Messages).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 context.SaveChanges();
 
@@ -388,15 +389,21 @@ namespace MyGanServer.Controllers
         [Route("DeleteEvent")]
         [HttpPost]
 
-        public bool DeleteEvent([FromBody] int eventID)
+        public bool DeleteEvent([FromBody] Event ev)
         {
             User user = HttpContext.Session.GetObject<User>("theUser");
 
             if (user != null)
             {
-                Event toDelete = context.Events.Where(e => e.EventId == eventID).FirstOrDefault();
-                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                Event toDelete = context.Events.Where(e => e.EventId == ev.EventId).FirstOrDefault();
+                foreach (Photo p in ev.Photos)
+                {
+                    Photo curr = context.Photos.Where(a => a.Id == p.Id).FirstOrDefault();
+                    context.Entry(curr).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+                context.SaveChanges();
 
+                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 context.SaveChanges();
 
 
@@ -422,6 +429,7 @@ namespace MyGanServer.Controllers
             {
                 Photo toDelete = context.Photos.Where(p => p.Id == photoID).FirstOrDefault();
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                context.Entry(toDelete.Event).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 context.SaveChanges();
 

@@ -240,11 +240,12 @@ select * from KindergartenManagers
 select * from PendingTeachers
 select * from StudentAllergies
 select * from Events
+select * from Photos
 
 DELETE Users WHERE UserID = 10
 
 UPDATE PendingTeachers
-SET StatusID= 3 WHERE UserID = 6
+SET StatusID= 3 WHERE UserID = 2
 select * from RelationToStudent
 
 select * from Users
