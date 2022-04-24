@@ -370,7 +370,7 @@ namespace MyGanServer.Controllers
             {
                 Message toDelete = context.Messages.Where(m => m.MessageId == message.MessageId).FirstOrDefault();
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                context.Entry(message.Group.Messages).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                //context.Entry(message.Group.Messages).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 context.SaveChanges();
 
