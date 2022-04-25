@@ -82,6 +82,11 @@ namespace MyGanServerBL.Models
                       ThenInclude(u => u.User).
 
                       Include(g => g.Groups).
+                      ThenInclude(s =>s.Students).
+                      ThenInclude(sa => sa.StudentAllergies).
+                      ThenInclude(a => a.Allergy).
+
+                      Include(g => g.Groups).
                       ThenInclude(m => m.Messages).
                       ThenInclude(g => g.Group).
                       ThenInclude(ms => ms.Messages).
@@ -101,7 +106,15 @@ namespace MyGanServerBL.Models
                       ThenInclude(g => g.Groups).
                       ThenInclude(s => s.Students).
                       ThenInclude(u => u.StudentOfUsers).
-                      ThenInclude(r => r.RelationToStudent)
+                      ThenInclude(r => r.RelationToStudent).
+
+                      Include(km => km.KindergartenManagers).
+                      ThenInclude(k => k.Kindergarten).
+                      ThenInclude(g => g.Groups).
+                      ThenInclude(s => s.Students).
+                      ThenInclude(a => a.StudentAllergies).
+                      ThenInclude(al => al.Allergy)
+
 
                       .Where(u => u.Email == email && u.Password == pswd).FirstOrDefault();
 
