@@ -398,8 +398,7 @@ namespace MyGanServer.Controllers
                 Event toDelete = context.Events.Where(e => e.EventId == ev.EventId).FirstOrDefault();
                 foreach (Photo p in ev.Photos)
                 {
-                    Photo curr = context.Photos.Where(a => a.Id == p.Id).FirstOrDefault();
-                    context.Entry(curr).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    DeletePhoto(p.Id);
                 }
                 context.SaveChanges();
 
@@ -427,9 +426,10 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                Photo toDelete = context.Photos.Where(p => p.Id == photoID).FirstOrDefault();
+                Photo toDelete = context.GetPhoto(photoID);
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 context.Entry(toDelete.Event).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                context.Entry(toDelete.User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 context.SaveChanges();
 
