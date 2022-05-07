@@ -242,7 +242,7 @@ select * from StudentAllergies
 select * from Events
 select * from Photos
 
-DELETE Users WHERE UserID = 10
+DELETE Photos WHERE UserID = 2
 
 UPDATE PendingTeachers
 SET StatusID= 3 WHERE UserID = 2
