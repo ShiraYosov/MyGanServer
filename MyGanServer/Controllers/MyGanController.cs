@@ -427,6 +427,9 @@ namespace MyGanServer.Controllers
             if (user != null)
             {
                 Photo toDelete = context.GetPhoto(photoID);
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Events",toDelete.Id+".jpg");
+                System.IO.File.Delete(path);
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 context.Entry(toDelete.Event).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 context.Entry(toDelete.User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
