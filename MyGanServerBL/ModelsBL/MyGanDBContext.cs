@@ -41,6 +41,7 @@ namespace MyGanServerBL.Models
                       ThenInclude(g => g.Groups).
                       ThenInclude(e => e.Events).
                       ThenInclude(p => p.Photos).
+                      ThenInclude(e => e.Event).
 
                       Include(k => k.KindergartenManagers).
                       ThenInclude(ki => ki.Kindergarten).
@@ -52,6 +53,7 @@ namespace MyGanServerBL.Models
                       Include(g => g.Groups).
                       ThenInclude(e => e.Events).
                       ThenInclude(p => p.Photos).
+                      ThenInclude(e => e.Event).
 
                       Include(g => g.Groups).
                       ThenInclude(s => s.Students).
@@ -177,6 +179,12 @@ namespace MyGanServerBL.Models
                 }
             }
             return teachers;
+        }
+
+        public Photo GetPhoto(int photoID)
+        {
+            Photo photo = this.Photos.Include(e => e.Event).Include(u => u.User).Where(p => p.Id == photoID).FirstOrDefault();
+            return photo;
         }
 
         public bool IsTeacherInKindergarten(int kID, PendingTeacher teacher)
