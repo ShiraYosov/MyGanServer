@@ -334,6 +334,40 @@ namespace MyGanServer.Controllers
 
         }
 
+        [Route("EditPhotoDescription")]
+        [HttpPost]
+
+        public bool EditDescription([FromBody] Photo photo)
+        {
+            User user = HttpContext.Session.GetObject<User>("theUser");
+
+            if (user != null)
+            {
+                try
+                {
+                    Photo curr = context.Photos.Where(p => p.Id == photo.Id).FirstOrDefault();
+                    curr.Description = photo.Description;
+                    context.Entry(curr).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    context.SaveChanges();
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+
+        }
+
         [Route("SendMessage")]
         [HttpPost]
 
