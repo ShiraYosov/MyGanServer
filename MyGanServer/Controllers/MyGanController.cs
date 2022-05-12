@@ -378,7 +378,13 @@ namespace MyGanServer.Controllers
             if (user != null)
             {
                 context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-
+                foreach(Student st in message.Group.Students)
+                {
+                    foreach(StudentOfUser u in st.StudentOfUsers)
+                    {
+                        EmailSender.SendEmail("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    }
+                }
                 context.SaveChanges();
 
 
