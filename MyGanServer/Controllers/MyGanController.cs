@@ -47,7 +47,7 @@ namespace MyGanServer.Controllers
             return result.ToString();
         }
 
-
+        public const int PERMITTED_STATUS = 2;
 
         [Route("Login")]
         [HttpGet]
@@ -151,6 +151,11 @@ namespace MyGanServer.Controllers
 
                 if (ok)
                 {
+                    if(t.StatusId == PERMITTED_STATUS)
+                    {
+                        EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר להתחבר  ", $"{t.User.Email}", $"{t.User.Fname} {t.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    }
+
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                     return true;
                 }
@@ -186,6 +191,11 @@ namespace MyGanServer.Controllers
 
                 if (ok)
                 {
+                    if (s.StatusId == PERMITTED_STATUS)
+                    {
+                        EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    }
+
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                     return true;
                 }
@@ -730,6 +740,18 @@ namespace MyGanServer.Controllers
 
             else if (user != null)
             {
+                if (string.IsNullOrEmpty(user.Password))
+                {
+                    user.Password = GenerateAlphanumerical(6);
+                    context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.Entry(user.StudentOfUsers.Last()).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+
+                    EmailSender.SendEmail("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return user;
+                }
+
                 bool success = context.ParentRegister(user, student);
 
                 if (success)

@@ -7,6 +7,7 @@ using MyGanServerBL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+
 namespace MyGanServerBL.Models
 {
     partial class MyGanDBContext
@@ -84,7 +85,7 @@ namespace MyGanServerBL.Models
                       ThenInclude(u => u.User).
 
                       Include(g => g.Groups).
-                      ThenInclude(s =>s.Students).
+                      ThenInclude(s => s.Students).
                       ThenInclude(sa => sa.StudentAllergies).
                       ThenInclude(a => a.Allergy).
 
@@ -139,7 +140,7 @@ namespace MyGanServerBL.Models
             }
         }
 
-        
+
         public bool AddUser(User user)
         {
             try
@@ -243,6 +244,7 @@ namespace MyGanServerBL.Models
                     this.StudentOfUsers.Update(studentOfUser);
                     this.SaveChanges();
 
+
                     return true;
                 }
 
@@ -287,7 +289,6 @@ namespace MyGanServerBL.Models
             {
 
                 this.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-
                 this.SaveChanges();
 
                 if (!StudentExist(student.StudentId))
