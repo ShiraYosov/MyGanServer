@@ -18,7 +18,6 @@ namespace MyGanServerBL.Models
         }
 
         public virtual DbSet<Allergy> Allergies { get; set; }
-        public virtual DbSet<Approval> Approvals { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
@@ -28,7 +27,6 @@ namespace MyGanServerBL.Models
         public virtual DbSet<PendingTeacher> PendingTeachers { get; set; }
         public virtual DbSet<Photo> Photos { get; set; }
         public virtual DbSet<RelationToStudent> RelationToStudents { get; set; }
-        public virtual DbSet<Signature> Signatures { get; set; }
         public virtual DbSet<StatusType> StatusTypes { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<StudentAllergy> StudentAllergies { get; set; }
@@ -46,7 +44,7 @@ namespace MyGanServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Allergy>(entity =>
             {
@@ -56,27 +54,6 @@ namespace MyGanServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("allergyName");
-            });
-
-            modelBuilder.Entity<Approval>(entity =>
-            {
-                entity.Property(e => e.ApprovalId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ApprovalID");
-
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
-
-                entity.HasOne(d => d.ApprovalNavigation)
-                    .WithOne(p => p.Approval)
-                    .HasForeignKey<Approval>(d => d.ApprovalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GroupApproval");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Approvals)
-                    .HasForeignKey(d => d.StatusId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ApprovalStatusType");
             });
 
             modelBuilder.Entity<Event>(entity =>
@@ -268,36 +245,10 @@ namespace MyGanServerBL.Models
                     .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<Signature>(entity =>
-            {
-                entity.HasKey(e => new { e.ApprovalId, e.UserId })
-                    .HasName("PK_UserApprovals");
-
-                entity.Property(e => e.ApprovalId).HasColumnName("ApprovalID");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.Property(e => e.SignatureDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Approval)
-                    .WithMany(p => p.Signatures)
-                    .HasForeignKey(d => d.ApprovalId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_GroupSignature");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Signatures)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserSignature");
-            });
-
             modelBuilder.Entity<StatusType>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__StatusTy__C8EE20437AF793F8");
+                    .HasName("PK__StatusTy__C8EE204338F6D74C");
 
                 entity.ToTable("StatusType");
 
@@ -411,7 +362,7 @@ namespace MyGanServerBL.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email, "UQ__Users__A9D10534A5D77BA6")
+                entity.HasIndex(e => e.Email, "UQ__Users__A9D1053498953839")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

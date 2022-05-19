@@ -22,7 +22,6 @@ namespace MyGanServerBL.Models
 
         public virtual Kindergarten Kindergarten { get; set; }
         public virtual User Teacher { get; set; }
-        public virtual Approval Approval { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<PendingTeacher> PendingTeachers { get; set; }

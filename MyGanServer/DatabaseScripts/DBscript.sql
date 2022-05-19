@@ -23,7 +23,6 @@ Password NVARCHAR(255) NOT NULL,
 FName NVARCHAR(255) NOT NULL,
 LastName NVARCHAR(255) NOT NULL,
 PhoneNumber NVARCHAR(255) NOT NULL,
-IsSystemManager BIT DEFAULT 0 NOT NULL,
 );
 
 
@@ -108,7 +107,6 @@ RelationToStudentID INT NOT NULL,
 CONSTRAINT FK_RelationToStudent FOREIGN KEY (RelationToStudentID)
 REFERENCES RelationToStudent(relationToStudentID),
 CONSTRAINT PK_StudentOfUsers PRIMARY KEY (StudentID,UserID),
-Vaad BIT DEFAULT 0 NOT NULL,
 StatusID INT,
 CONSTRAINT FK_UserStatus FOREIGN KEY (StatusID)
 REFERENCES StatusType(StatusID),
@@ -124,27 +122,6 @@ REFERENCES Kindergarten(KindergartenID),
 CONSTRAINT PK_KindergartenManager PRIMARY KEY (UserID,KindergartenID)
 );
 
-create table Approvals(
-ApprovalID INT PRIMARY KEY NOT NULL,
-CONSTRAINT FK_GroupApproval FOREIGN KEY (ApprovalID)
-REFERENCES Groups(GroupID),
-Waiting INT NOT NULL,
-Approved INT NOT NULL,
-StatusID INT NOT NULL,
-CONSTRAINT FK_ApprovalStatusType FOREIGN KEY (StatusID)
-REFERENCES StatusType(StatusID),
-);
-
-create table Signatures(
-ApprovalID INT NOT NULL,
-CONSTRAINT FK_GroupSignature FOREIGN KEY (ApprovalID)
-REFERENCES Approvals(ApprovalID),
-UserID INT NOT NULL,
-CONSTRAINT FK_UserSignature FOREIGN KEY (UserID)
-REFERENCES Users(UserID),
-SignatureDate DATETIME NOT NULL DEFAULT GETDATE(),
-CONSTRAINT PK_UserApprovals PRIMARY KEY (ApprovalID,UserID)
-);
 
 create table Allergies(
 allergyID INT identity(1,1) PRIMARY KEY NOT NULL,

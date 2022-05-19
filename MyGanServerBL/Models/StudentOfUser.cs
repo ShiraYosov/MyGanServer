@@ -10,7 +10,6 @@ namespace MyGanServerBL.Models
         public string StudentId { get; set; }
         public int UserId { get; set; }
         public int RelationToStudentId { get; set; }
-        public bool Vaad { get; set; }
         public int? StatusId { get; set; }
 
         public virtual RelationToStudent RelationToStudent { get; set; }
