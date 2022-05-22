@@ -193,7 +193,7 @@ namespace MyGanServer.Controllers
                 {
                     if (s.StatusId == PERMITTED_STATUS)
                     {
-                        EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        //EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
 
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
@@ -392,7 +392,7 @@ namespace MyGanServer.Controllers
                 {
                     foreach(StudentOfUser u in st.StudentOfUsers)
                     {
-                        EmailSender.SendEmail("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        //EmailSender.SendEmail("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
                 }
                 context.SaveChanges();

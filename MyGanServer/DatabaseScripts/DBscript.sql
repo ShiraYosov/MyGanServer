@@ -205,7 +205,6 @@ select * from Groups
 
 insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kuku', 1)
 insert into Groups (TeacherID, GroupName, KindergartenID) VALUES (1, 'Kaka', 1)
-insert into Messages (GroupID,Content, UserID) VALUES (3,'Hiiii',2)
 Delete from Messages WHERE MesasgeID = 1
 
 select * from RelationToStudent
