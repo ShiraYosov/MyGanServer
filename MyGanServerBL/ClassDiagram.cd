@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MyGanServerBL.Models.Allergy">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAIAAACAAAAAA=</HashCode>
+      <FileName>Models\Allergy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.User">
+    <Position X="8" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAEAAAKAAACAAAAEAQAgAAAAAAAACAAAAAQAAEAg=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.StudentOfUser">
+    <Position X="2" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAMQAAAAAAAAAAAAAgAAAAAAAAEAAQAAAACAAA=</HashCode>
+      <FileName>Models\StudentOfUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.StudentAllergy">
+    <Position X="10" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAgAAABAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Models\StudentAllergy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Student">
+    <Position X="11.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAEAAAAAACAAAEAAAQAAAAAAAAAMAAAAAECAAg=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.RelationToStudent">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEEAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RelationToStudent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Photo">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAgAAAgAAAAAAAAAAwAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Photo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.PendingTeacher">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAEAMAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\PendingTeacher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Message">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAEAEAgAAAAAAAAQAAAgAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Message.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.KindergartenManager">
+    <Position X="2" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAgAAAAAAAAAAAAAAAgAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\KindergartenManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Kindergarten">
+    <Position X="6.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEgAAIAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Kindergarten.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Group">
+    <Position X="5.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMEAAgEAAAAAAAAAAAACAAAAgAAAAAAAAAABQAAAAE=</HashCode>
+      <FileName>Models\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Grade">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Models\Grade.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.Event">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAkAAAAACAAAAAAAAAAAIAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Models\Event.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyGanServerBL.Models.StatusType">
+    <Position X="13.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAIAAAgAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StatusType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

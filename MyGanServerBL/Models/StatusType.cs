@@ -7,6 +7,7 @@ namespace MyGanServerBL.Models
 {
     public partial class StatusType
     {
+       
         public StatusType()
         {
             PendingTeachers = new HashSet<PendingTeacher>();
