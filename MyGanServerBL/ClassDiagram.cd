@@ -1,109 +1,183 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="MyGanServerBL.Models.Allergy">
-    <Position X="11.5" Y="0.5" Width="1.5" />
+    <Position X="14.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAIAAACAAAAAA=</HashCode>
       <FileName>Models\Allergy.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="StudentAllergies" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.User">
-    <Position X="8" Y="3" Width="1.5" />
+    <Position X="6" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAEAAAKAAACAAAAEAQAgAAAAAAAACAAAAAQAAEAg=</HashCode>
       <FileName>Models\User.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Messages" />
+      <Property Name="Groups" />
+      <Property Name="PendingTeachers" />
+      <Property Name="Photos" />
+      <Property Name="StudentOfUsers" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.StudentOfUser">
-    <Position X="2" Y="1" Width="1.5" />
+    <Position X="9" Y="3.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAMQAAAAAAAAAAAAAgAAAAAAAAEAAQAAAACAAA=</HashCode>
       <FileName>Models\StudentOfUser.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="RelationToStudent" />
+      <Property Name="Status" />
+      <Property Name="Student" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.StudentAllergy">
-    <Position X="10" Y="3.25" Width="1.5" />
+    <Position X="11.5" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAAAAAAAAAAgAAABAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Models\StudentAllergy.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Allergy" />
+      <Property Name="Student" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Student">
-    <Position X="11.75" Y="3" Width="1.5" />
+    <Position X="8.75" Y="8.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAEAEAAAAAACAAAEAAAQAAAAAAAAAMAAAAAECAAg=</HashCode>
       <FileName>Models\Student.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Grade" />
+      <Property Name="Group" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="StudentAllergies" />
+      <Property Name="StudentOfUsers" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.RelationToStudent">
-    <Position X="5.75" Y="0.5" Width="1.5" />
+    <Position X="8.75" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAEEAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
       <FileName>Models\RelationToStudent.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="StudentOfUsers" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Photo">
-    <Position X="4" Y="3.5" Width="1.5" />
+    <Position X="3.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAADAAAgAAAgAAAAAAAAAAwAAgAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Photo.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Event" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.PendingTeacher">
-    <Position X="7.75" Y="0.5" Width="1.5" />
+    <Position X="9" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAEAMAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\PendingTeacher.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Group" />
+      <Property Name="Status" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Message">
-    <Position X="9.75" Y="0.5" Width="1.5" />
+    <Position X="3" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAEAEAgAAAAAAAAQAAAgAAAAAAAAEAAAAAAAAAAA=</HashCode>
       <FileName>Models\Message.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Group" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.KindergartenManager">
-    <Position X="2" Y="4" Width="1.5" />
+    <Position X="1" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAgAAAAAAAAAAAAAAAgAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Models\KindergartenManager.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Kindergarten" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Kindergarten">
-    <Position X="6.25" Y="2.75" Width="1.5" />
+    <Position X="6" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEgAAIAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Kindergarten.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Groups" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Group">
-    <Position X="5.75" Y="5.25" Width="1.5" />
+    <Position X="6" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAMEAAgEAAAAAAAAAAAACAAAAgAAAAAAAAAABQAAAAE=</HashCode>
       <FileName>Models\Group.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Teacher" />
+      <Property Name="Kindergarten" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Events" />
+      <Property Name="Messages" />
+      <Property Name="Students" />
+      <Property Name="PendingTeachers" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Grade">
-    <Position X="10" Y="5.5" Width="1.5" />
+    <Position X="11.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAEAAAAAAAAAA=</HashCode>
       <FileName>Models\Grade.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Students" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.Event">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="3" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEAkAAAAACAAAAAAAAAAAIAAAAAAAAAAAABAAAA=</HashCode>
       <FileName>Models\Event.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Group" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Photos" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MyGanServerBL.Models.StatusType">
-    <Position X="13.5" Y="2.25" Width="1.5" />
+    <Position X="12.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAIAAAgAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\StatusType.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="StudentOfUsers" />
+      <Property Name="PendingTeachers" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
