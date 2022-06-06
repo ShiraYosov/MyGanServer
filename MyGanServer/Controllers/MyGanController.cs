@@ -26,7 +26,7 @@ namespace MyGanServer.Controllers
         #endregion
 
 
-        //Random string
+        //Create random string
         public static string GenerateAlphanumerical(int size)
         {
             char[] chars =
@@ -151,7 +151,8 @@ namespace MyGanServer.Controllers
 
                 if (ok)
                 {
-                    if(t.StatusId == PERMITTED_STATUS)
+                    //Check if user is permitted
+                    if (t.StatusId == PERMITTED_STATUS)
                     {
                         EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{t.User.Email}", $"{t.User.Fname} {t.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
@@ -191,6 +192,7 @@ namespace MyGanServer.Controllers
 
                 if (ok)
                 {
+                    //Check if user is permitted
                     if (s.StatusId == PERMITTED_STATUS)
                     {
                         EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
@@ -262,10 +264,10 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
+                //Check if group is not contained in the groups list
                 if (!context.Groups.Contains(group))
                 {
                     context.Entry(group).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-
                     context.SaveChanges();
 
                 }
@@ -388,9 +390,10 @@ namespace MyGanServer.Controllers
             if (user != null)
             {
                 context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                foreach(Student st in message.Group.Students)
+                foreach (Student st in message.Group.Students)
                 {
-                    foreach(StudentOfUser u in st.StudentOfUsers)
+                    //Send email message
+                    foreach (StudentOfUser u in st.StudentOfUsers)
                     {
                         EmailSender.SendEmail("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
@@ -420,7 +423,6 @@ namespace MyGanServer.Controllers
             {
                 Message toDelete = context.Messages.Where(m => m.MessageId == message.MessageId).FirstOrDefault();
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                //context.Entry(message.Group.Messages).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 context.SaveChanges();
 
@@ -446,6 +448,7 @@ namespace MyGanServer.Controllers
             if (user != null)
             {
                 Event toDelete = context.Events.Where(e => e.EventId == ev.EventId).FirstOrDefault();
+                //Delete all photos from event
                 foreach (Photo p in ev.Photos)
                 {
                     DeletePhoto(p.Id);
@@ -477,8 +480,8 @@ namespace MyGanServer.Controllers
             if (user != null)
             {
                 Photo toDelete = context.GetPhoto(photoID);
-
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Events",toDelete.Id+".jpg");
+                //Delet photo file
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Events", toDelete.Id + ".jpg");
                 System.IO.File.Delete(path);
                 context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 context.Entry(toDelete.Event).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -510,7 +513,6 @@ namespace MyGanServer.Controllers
                 if (!context.KindergartenManagers.Contains(kManager))
                 {
                     context.Entry(kManager).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    //context.Kindergartens.Update(group.Kindergarten);
 
                     context.SaveChanges();
 
@@ -570,6 +572,7 @@ namespace MyGanServer.Controllers
             //Check if user logged in and its ID is the same as the contact user ID
             if (currentUser != null && currentUser.UserId == user.UserId)
             {
+                //Check if user is new or if it already exists
                 if (user.UserId > 0)
                 {
                     context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -591,6 +594,7 @@ namespace MyGanServer.Controllers
 
             else if (user != null)
             {
+                //Create new user password 
                 if (string.IsNullOrEmpty(user.Password))
                 {
                     user.Password = GenerateAlphanumerical(6);
@@ -598,6 +602,7 @@ namespace MyGanServer.Controllers
                     context.Entry(user.KindergartenManagers.Last()).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                     context.SaveChanges();
 
+                    //send email
                     EmailSender.SendEmail("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                     return user;
@@ -635,6 +640,7 @@ namespace MyGanServer.Controllers
             //Check if user logged in and its ID is the same as the contact user ID
             if (currentUser != null && currentUser.UserId == user.UserId)
             {
+                //Check if user is new or if it already exists
                 if (user.UserId > 0)
                 {
                     context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -651,6 +657,7 @@ namespace MyGanServer.Controllers
                 return user;
             }
 
+            //if new user
             else if (user != null && user.Groups != null && user.Groups.Count == 1)
             {
                 bool success = context.TeacherRegister(user);
@@ -707,6 +714,7 @@ namespace MyGanServer.Controllers
 
                 try
                 {
+                    //Update user info
                     context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                     context.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -740,6 +748,7 @@ namespace MyGanServer.Controllers
 
             else if (user != null)
             {
+                //Create user password
                 if (string.IsNullOrEmpty(user.Password))
                 {
                     user.Password = GenerateAlphanumerical(6);

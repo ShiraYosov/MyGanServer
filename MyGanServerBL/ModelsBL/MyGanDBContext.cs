@@ -16,7 +16,7 @@ namespace MyGanServerBL.Models
         public const int UNPERMITTED_STATUS = 1;
         public const int PERMITTED_STATUS = 2;
 
-
+        //Login function
         public User Login(string email, string pswd)
         {
             User user = new User();
@@ -125,6 +125,7 @@ namespace MyGanServerBL.Models
             return user;
         }
 
+        //Add new allergy
         public bool AddAllergy(Allergy allergy)
         {
             try
@@ -140,7 +141,7 @@ namespace MyGanServerBL.Models
             }
         }
 
-
+        //Add new user
         public bool AddUser(User user)
         {
             try
@@ -156,6 +157,7 @@ namespace MyGanServerBL.Models
             }
         }
 
+        //Check if user exists 
         public bool StudentExist(string ID)
         {
             foreach (Student s in this.Students)
@@ -168,6 +170,7 @@ namespace MyGanServerBL.Models
 
         public const int WAITING_STATUS = 3;
 
+        //Get sll teachers with waiting status
         public List<PendingTeacher> GetTeachersList(int kID)
         {
             List<PendingTeacher> teachers = new List<PendingTeacher>();
@@ -182,12 +185,14 @@ namespace MyGanServerBL.Models
             return teachers;
         }
 
+        //Get photo by id
         public Photo GetPhoto(int photoID)
         {
             Photo photo = this.Photos.Include(e => e.Event).Include(u => u.User).Where(p => p.Id == photoID).FirstOrDefault();
             return photo;
         }
 
+        //This function checks if the pendingTeacher is a teacher in the kindergarten
         public bool IsTeacherInKindergarten(int kID, PendingTeacher teacher)
         {
             if (teacher.Group.KindergartenId == kID)
@@ -196,6 +201,7 @@ namespace MyGanServerBL.Models
             return false;
         }
 
+        //Register teacher as pending teacher
         public bool TeacherRegister(User user)
         {
             try
@@ -231,6 +237,7 @@ namespace MyGanServerBL.Models
             }
         }
 
+        //Change user status by the type of object
         public bool ChangeStatusForUser(object u)
         {
             try
@@ -283,6 +290,7 @@ namespace MyGanServerBL.Models
             }
         }
 
+        //Register parent 
         public bool ParentRegister(User user, Student student)
         {
             try
