@@ -154,7 +154,7 @@ namespace MyGanServer.Controllers
                     //Check if user is permitted
                     if (t.StatusId == PERMITTED_STATUS)
                     {
-                        EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{t.User.Email}", $"{t.User.Fname} {t.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        EmailSender.SendEmail2("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{t.User.Email}", $"{t.User.Fname} {t.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
 
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
@@ -195,7 +195,7 @@ namespace MyGanServer.Controllers
                     //Check if user is permitted
                     if (s.StatusId == PERMITTED_STATUS)
                     {
-                        EmailSender.SendEmail("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        EmailSender.SendEmail2("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
 
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
@@ -395,7 +395,7 @@ namespace MyGanServer.Controllers
                     //Send email message
                     foreach (StudentOfUser u in st.StudentOfUsers)
                     {
-                        EmailSender.SendEmail("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        EmailSender.SendEmail2("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     }
                 }
                 context.SaveChanges();
@@ -603,7 +603,7 @@ namespace MyGanServer.Controllers
                     context.SaveChanges();
 
                     //send email
-                    EmailSender.SendEmail("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    EmailSender.SendEmail2("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                     return user;
                 }
@@ -756,7 +756,7 @@ namespace MyGanServer.Controllers
                     context.Entry(user.StudentOfUsers.Last()).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                     context.SaveChanges();
 
-                    EmailSender.SendEmail("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                    EmailSender.SendEmail2("ברוכים הבאים!", $"  {user.Password} - סיסמתך לאפליקציה  ", $"{user.Email}", $"{user.Fname} {user.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
                     Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                     return user;
                 }
