@@ -224,5 +224,6 @@ UPDATE PendingTeachers
 SET StatusID= 3 WHERE UserID = 2
 select * from RelationToStudent
 
+
 select * from Users
 delete users where UserID = 5
