@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Events\" />
+    <Folder Include="wwwroot\images\kids\" />
     <Folder Include="wwwroot\images\users\" />
   </ItemGroup>
 

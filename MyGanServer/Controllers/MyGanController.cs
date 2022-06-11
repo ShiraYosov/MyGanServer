@@ -53,21 +53,30 @@ namespace MyGanServer.Controllers
         [HttpGet]
         public User Login([FromQuery] string email, [FromQuery] string pass)
         {
-            User user = context.Login(email, pass);
-
-            //Check user name and password
-            if (user != null)
+            try
             {
-                HttpContext.Session.SetObject("theUser", user);
 
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
-                return user;
+                User user = context.Login(email, pass);
+
+                //Check user name and password
+                if (user != null)
+                {
+                    HttpContext.Session.SetObject("theUser", user);
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                    return user;
+                }
+                else
+                {
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
             }
-            else
+            catch
             {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
         }
@@ -117,20 +126,29 @@ namespace MyGanServer.Controllers
         [HttpGet]
         public List<PendingTeacher> GetTeachersWithWaitStatus([FromQuery] int kindergartenID)
         {
-            User user = HttpContext.Session.GetObject<User>("theUser");
-
-            if (user != null)
+            try
             {
-                List<PendingTeacher> teachersList = this.context.GetTeachersList(kindergartenID);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
 
-                return teachersList;
+
+                User user = HttpContext.Session.GetObject<User>("theUser");
+
+                if (user != null)
+                {
+                    List<PendingTeacher> teachersList = this.context.GetTeachersList(kindergartenID);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                    return teachersList;
+                }
+
+                else
+                {
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
             }
-
-            else
+            catch
             {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
 
@@ -142,37 +160,45 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public bool ChangeTeacherStatus(PendingTeacher t)
         {
-            User user = HttpContext.Session.GetObject<User>("theUser");
-
-            if (user != null)
+            try
             {
 
-                bool ok = this.context.ChangeStatusForUser(t);
 
-                if (ok)
+                User user = HttpContext.Session.GetObject<User>("theUser");
+
+                if (user != null)
                 {
-                    //Check if user is permitted
-                    if (t.StatusId == PERMITTED_STATUS)
-                    {
-                        EmailSender.SendEmail2("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{t.User.Email}", $"{t.User.Fname} {t.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
-                    }
 
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    return true;
+                    bool ok = this.context.ChangeStatusForUser(t);
+
+                    if (ok)
+                    {
+                        //Check if user is permitted
+                        if (t.StatusId == PERMITTED_STATUS)
+                        {
+                            EmailSender.SendEmail2("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{t.User.Email}", $"{t.User.Fname} {t.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        }
+
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return true;
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+                        return false;
+                    }
                 }
+
+
                 else
                 {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return false;
                 }
-
-
             }
-
-            else
+            catch
             {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
 
@@ -183,37 +209,46 @@ namespace MyGanServer.Controllers
         [HttpPost]
         public bool ChangeParentStatus(StudentOfUser s)
         {
-            User user = HttpContext.Session.GetObject<User>("theUser");
-
-            if (user != null)
+            try
             {
 
-                bool ok = this.context.ChangeStatusForUser(s);
 
-                if (ok)
+                User user = HttpContext.Session.GetObject<User>("theUser");
+
+                if (user != null)
                 {
-                    //Check if user is permitted
-                    if (s.StatusId == PERMITTED_STATUS)
+
+                    bool ok = this.context.ChangeStatusForUser(s);
+
+                    if (ok)
                     {
-                        EmailSender.SendEmail2("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        //Check if user is permitted
+                        if (s.StatusId == PERMITTED_STATUS)
+                        {
+                            EmailSender.SendEmail2("עדכון", $"  בקשת ההרשמה שלך אושרה! מהר/י להתחבר  ", $"{s.User.Email}", $"{s.User.Fname} {s.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        }
+
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return true;
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+                        return false;
                     }
 
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    return true;
+
                 }
+
                 else
                 {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return false;
                 }
-
-
             }
-
-            else
+            catch
             {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
 
@@ -226,6 +261,7 @@ namespace MyGanServer.Controllers
 
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
+           
             User user = HttpContext.Session.GetObject<User>("theUser");
             //Check if user logged in and its ID is the same as the contact user ID
             if (user != null)
@@ -260,23 +296,32 @@ namespace MyGanServer.Controllers
 
         public Group AddGroup([FromBody] Group group)
         {
-            User user = HttpContext.Session.GetObject<User>("theUser");
-
-            if (user != null)
+            try
             {
-                //Check if group is not contained in the groups list
-                if (!context.Groups.Contains(group))
+
+
+                User user = HttpContext.Session.GetObject<User>("theUser");
+
+                if (user != null)
                 {
-                    context.Entry(group).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    context.SaveChanges();
+                    //Check if group is not contained in the groups list
+                    if (!context.Groups.Contains(group))
+                    {
+                        context.Entry(group).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                        context.SaveChanges();
 
+                    }
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return group;
                 }
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return group;
+                else
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
             }
-            else
+            catch
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
 
@@ -287,30 +332,32 @@ namespace MyGanServer.Controllers
 
         public Event AddEvent([FromBody] Event ev)
         {
-            User user = HttpContext.Session.GetObject<User>("theUser");
+           
+                User user = HttpContext.Session.GetObject<User>("theUser");
 
-            if (user != null)
-            {
-                try
+                if (user != null)
                 {
-                    context.Entry(ev).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    context.SaveChanges();
+                    try
+                    {
+                        context.Entry(ev).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                        context.SaveChanges();
 
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    return ev;
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return ev;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return null;
+                    }
+
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex.Message);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return null;
                 }
-
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
-            }
+         
 
         }
 
@@ -389,20 +436,30 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                foreach (Student st in message.Group.Students)
+                try
                 {
-                    //Send email message
-                    foreach (StudentOfUser u in st.StudentOfUsers)
+
+
+                    context.Entry(message).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    foreach (Student st in message.Group.Students)
                     {
-                        EmailSender.SendEmail2("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        //Send email message
+                        foreach (StudentOfUser u in st.StudentOfUsers)
+                        {
+                            EmailSender.SendEmail2("הודעה חדשה!", $"  {message.Content} -התקבלה הודעה חדשה  ", $"{u.User.Email}", $"{u.User.Fname} {u.User.LastName}", "<ganenu1@gmail.com>", $"גננו", "#GANENU123!", "smtp.gmail.com");
+                        }
                     }
+                    context.SaveChanges();
+
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return message;
                 }
-                context.SaveChanges();
-
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return message;
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
             }
             else
             {
@@ -421,14 +478,24 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                Message toDelete = context.Messages.Where(m => m.MessageId == message.MessageId).FirstOrDefault();
-                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-
-                context.SaveChanges();
+                try
+                {
 
 
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return true;
+                    Message toDelete = context.Messages.Where(m => m.MessageId == message.MessageId).FirstOrDefault();
+                    context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+
+                    context.SaveChanges();
+
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
             }
             else
             {
@@ -447,20 +514,30 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                Event toDelete = context.Events.Where(e => e.EventId == ev.EventId).FirstOrDefault();
-                //Delete all photos from event
-                foreach (Photo p in ev.Photos)
+                try
                 {
-                    DeletePhoto(p.Id);
+
+
+                    Event toDelete = context.Events.Where(e => e.EventId == ev.EventId).FirstOrDefault();
+                    //Delete all photos from event
+                    foreach (Photo p in ev.Photos)
+                    {
+                        DeletePhoto(p.Id);
+                    }
+                    context.SaveChanges();
+
+                    context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    context.SaveChanges();
+
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
                 }
-                context.SaveChanges();
-
-                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                context.SaveChanges();
-
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return true;
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
             }
             else
             {
@@ -479,19 +556,29 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                Photo toDelete = context.GetPhoto(photoID);
-                //Delet photo file
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Events", toDelete.Id + ".jpg");
-                System.IO.File.Delete(path);
-                context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-                context.Entry(toDelete.Event).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                context.Entry(toDelete.User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-
-                context.SaveChanges();
+                try
+                {
 
 
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return true;
+                    Photo toDelete = context.GetPhoto(photoID);
+                    //Delet photo file
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Events", toDelete.Id + ".jpg");
+                    System.IO.File.Delete(path);
+                    context.Entry(toDelete).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    context.Entry(toDelete.Event).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    context.Entry(toDelete.User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+                    context.SaveChanges();
+
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
             }
             else
             {
@@ -510,15 +597,25 @@ namespace MyGanServer.Controllers
 
             if (user != null)
             {
-                if (!context.KindergartenManagers.Contains(kManager))
+                try
                 {
-                    context.Entry(kManager).State = Microsoft.EntityFrameworkCore.EntityState.Added;
 
-                    context.SaveChanges();
 
+                    if (!context.KindergartenManagers.Contains(kManager))
+                    {
+                        context.Entry(kManager).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+
+                        context.SaveChanges();
+
+                    }
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    return true;
                 }
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return true;
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
             }
             else
             {
@@ -536,15 +633,25 @@ namespace MyGanServer.Controllers
 
             if (allergy != null)
             {
-                bool added = this.context.AddAllergy(allergy);
-                if (added)
+                try
                 {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    return added;
+
+
+                    bool added = this.context.AddAllergy(allergy);
+                    if (added)
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return added;
+                    }
+                    else
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
                 }
-                else
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return false;
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
             }
             else
             {
